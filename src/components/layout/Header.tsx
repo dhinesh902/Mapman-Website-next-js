@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Search, Bell, User, Menu, X, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/providers/auth-provider";
 
 const navLinks = [
   { name: "Home", path: "/" },
@@ -18,6 +19,16 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { isLoggedIn, openLoginSidebar } = useAuth();
+
+  const handleAuthClick = (path: string) => {
+    if (!isLoggedIn) {
+      openLoginSidebar();
+    } else {
+      router.push(path);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,15 +85,15 @@ export default function Header() {
           <button className="text-slate-600 hover:text-primary transition-colors">
             <Search className="w-5 h-5" />
           </button>
-          <Link href="/notifications" className="text-slate-600 hover:text-primary transition-colors relative">
+          <button onClick={() => handleAuthClick('/notifications')} className="text-slate-600 hover:text-primary transition-colors relative">
             <Bell className="w-5 h-5" />
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
-          </Link>
-          <Link href="/profile">
+          </button>
+          <button onClick={() => handleAuthClick('/profile')}>
             <div className="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden hover:ring-2 hover:ring-primary hover:ring-offset-2 transition-all cursor-pointer">
               <User className="w-5 h-5 text-slate-500 dark:text-slate-400" />
             </div>
-          </Link>
+          </button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -119,21 +130,26 @@ export default function Header() {
                 </Link>
               ))}
               <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-700 mt-2">
-                <Link
-                  href="/profile"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handleAuthClick('/profile');
+                  }}
                   className="flex items-center gap-3 text-slate-700 dark:text-slate-200"
                 >
                   <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
                     <User className="w-5 h-5 text-slate-500" />
                   </div>
                   <span className="font-medium">My Profile</span>
-                </Link>
+                </button>
                 <div className="flex gap-4 text-slate-500">
                   <Search className="w-5 h-5" />
-                  <Link href="/notifications" onClick={() => setIsMobileMenuOpen(false)}>
+                  <button onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handleAuthClick('/notifications');
+                  }}>
                     <Bell className="w-5 h-5" />
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

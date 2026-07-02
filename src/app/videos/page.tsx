@@ -1,180 +1,452 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Search, Play, ThumbsUp, Eye, Share2, Heart, Clock, MoreVertical, Settings, Trash2, Edit } from "lucide-react";
-import Image from "next/image";
-
-const allVideos = [
-  {
-    id: 1,
-    title: "Top 10 Street Food Places in Chennai",
-    thumbnail: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    duration: "10:24",
-    category: "Restaurants",
-    uploadedDate: "2 days ago",
-    views: "15.4K",
-    likes: "1.2K",
-  },
-  {
-    id: 2,
-    title: "Best Luxury Hotels for Staycation",
-    thumbnail: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    duration: "15:30",
-    category: "Hotels",
-    uploadedDate: "1 week ago",
-    views: "42K",
-    likes: "3.5K",
-  },
-  {
-    id: 3,
-    title: "Night Market Shopping Guide",
-    thumbnail: "https://images.unsplash.com/photo-1534723452862-4c874018d66d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    duration: "08:45",
-    category: "Shopping",
-    uploadedDate: "3 weeks ago",
-    views: "8.9K",
-    likes: "850",
-  },
-  {
-    id: 4,
-    title: "Top Medical Facilities & Hospitals",
-    thumbnail: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    duration: "12:15",
-    category: "Hospitals",
-    uploadedDate: "1 month ago",
-    views: "5.2K",
-    likes: "420",
-  }
-];
+import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  Search,
+  Play,
+  ThumbsUp,
+  Eye,
+  Share2,
+  Heart,
+  Clock,
+  MoreVertical,
+  Settings,
+  Trash2,
+  Edit,
+  X,
+  Smartphone,
+  ArrowRight,
+  Loader2,
+  Upload,
+  Video as VideoIcon,
+  MapPin,
+} from "lucide-react";
+import { getCategoryVideos, getMyVideos } from "@/services/apiService";
+import { useAuth } from "@/providers/auth-provider";
+import { CategoryVideoData, MyVideosData } from "@/models/videos_model";
 
 export default function VideosPage() {
   const [activeTab, setActiveTab] = useState("all");
+  const [videos, setVideos] = useState<CategoryVideoData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [myVideos, setMyVideos] = useState<MyVideosData[]>([]);
+  const [myLoading, setMyLoading] = useState(false);
+  const [myError, setMyError] = useState("");
+  const [isUploadSidebarOpen, setIsUploadSidebarOpen] = useState(false);
+
+  const { isLoggedIn, openLoginSidebar } = useAuth();
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const res = await getCategoryVideos();
+        if (res && Array.isArray(res.data)) {
+          const fetchedVideos = res.data;
+          const othersVideos = fetchedVideos.filter(
+            (v: CategoryVideoData) =>
+              v.categoryName?.toLowerCase() === "others",
+          );
+          const restVideos = fetchedVideos.filter(
+            (v: CategoryVideoData) =>
+              v.categoryName?.toLowerCase() !== "others",
+          );
+          setVideos([...restVideos, ...othersVideos]);
+        } else {
+          setVideos([]);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchVideos();
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === "my" && isLoggedIn) {
+      const fetchMyVideos = async () => {
+        setMyLoading(true);
+        setMyError("");
+        try {
+          const res = await getMyVideos();
+          if (res && Array.isArray(res.data)) {
+            setMyVideos(res.data);
+          } else {
+            setMyVideos([]);
+          }
+        } catch (err) {
+          console.error(err);
+          setMyError("Failed to load your videos. Please try again.");
+        } finally {
+          setMyLoading(false);
+        }
+      };
+      fetchMyVideos();
+    }
+  }, [activeTab, isLoggedIn]);
+
+  const handleMyVideosClick = () => {
+    if (!isLoggedIn) {
+      openLoginSidebar();
+    } else {
+      setActiveTab("my");
+    }
+  };
+
+  const getMediaUrl = (url: string) =>
+    url.startsWith("http") ? url : `https://api.mapman.in${url}`;
 
   return (
-    <div className="container mx-auto px-4 md:px-6 py-8 pb-24">
+    <div className="w-full px-2 md:px-4 lg:px-8 py-6 pb-24 relative overflow-hidden">
       {/* Header & Tabs */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
-          <h1 className="text-3xl font-bold font-heading mb-2">Video Gallery</h1>
-          <p className="text-slate-500">Discover places through our community videos</p>
+          <h1 className="text-3xl font-bold font-heading mb-2">
+            Video Gallery
+          </h1>
+          <p className="text-slate-500">
+            Discover places through our community videos
+          </p>
         </div>
 
-        <div className="flex items-center gap-4 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl">
-          <button
-            onClick={() => setActiveTab("all")}
-            className={`relative px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
-              activeTab === "all" ? "text-primary" : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            All Videos
-            {activeTab === "all" && (
-              <motion.div layoutId="video-tab" className="absolute inset-0 bg-white dark:bg-slate-900 rounded-lg shadow-sm -z-10" />
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab("my")}
-            className={`relative px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
-              activeTab === "my" ? "text-primary" : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            My Videos
-            {activeTab === "my" && (
-              <motion.div layoutId="video-tab" className="absolute inset-0 bg-white dark:bg-slate-900 rounded-lg shadow-sm -z-10" />
-            )}
-          </button>
-        </div>
-      </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl">
+            <button
+              onClick={() => setActiveTab("all")}
+              className={`relative px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                activeTab === "all"
+                  ? "text-primary"
+                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              All Videos
+              {activeTab === "all" && (
+                <motion.div
+                  layoutId="video-tab"
+                  className="absolute inset-0 bg-white dark:bg-slate-900 rounded-lg shadow-sm -z-10"
+                />
+              )}
+            </button>
+            <button
+              onClick={handleMyVideosClick}
+              className={`relative px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                activeTab === "my"
+                  ? "text-primary"
+                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              My Videos
+              {activeTab === "my" && (
+                <motion.div
+                  layoutId="video-tab"
+                  className="absolute inset-0 bg-white dark:bg-slate-900 rounded-lg shadow-sm -z-10"
+                />
+              )}
+            </button>
+          </div>
 
-      {/* Filters & Search */}
-      <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
-        <div className="relative w-full sm:max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-          <input 
-            type="text" 
-            placeholder="Search videos..." 
-            className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all shadow-sm"
-          />
+          {activeTab === "my" && (
+            <button 
+              onClick={() => setIsUploadSidebarOpen(true)}
+              className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-primary/30"
+            >
+              <Upload className="w-4 h-4" /> Upload Video
+            </button>
+          )}
         </div>
-        <select className="w-full sm:w-auto px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer shadow-sm">
-          <option>Latest</option>
-          <option>Most Viewed</option>
-          <option>Trending</option>
-        </select>
       </div>
 
       {/* Video Grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {allVideos.map((video, idx) => (
-          <motion.div
-            key={video.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-slate-100 dark:border-slate-700"
-          >
-            <div className="relative aspect-video overflow-hidden cursor-pointer">
-              <Image src={video.thumbnail} alt={video.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-              
-              {/* Overlays */}
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-all">
-                  <Play className="w-5 h-5 ml-1" />
-                </div>
-              </div>
-              
-              <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded-md text-xs font-medium flex items-center gap-1 backdrop-blur-sm">
-                <Clock className="w-3 h-3" /> {video.duration}
-              </div>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+        {activeTab === "all" ? (
+          loading ? (
+            <div className="col-span-full flex items-center justify-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
+          ) : videos.length === 0 ? (
+            <div className="col-span-full text-center py-20 text-slate-500">
+              No videos available at the moment.
+            </div>
+          ) : (
+            videos.map((video, idx) => {
+              const mediaUrl = video.thumbnail
+                ? getMediaUrl(video.thumbnail)
+                : getMediaUrl(video.categoryVideo || "");
+              const isVideoFile =
+                mediaUrl.endsWith(".mp4") ||
+                mediaUrl.endsWith(".webm") ||
+                mediaUrl.endsWith(".m3u8");
 
-            <div className="p-4">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-bold text-base line-clamp-2 pr-4">{video.title}</h3>
-                {activeTab === "my" && (
-                  <button className="text-slate-400 hover:text-slate-700 shrink-0">
-                    <MoreVertical className="w-5 h-5" />
-                  </button>
-                )}
-              </div>
-              <p className="text-xs font-semibold text-primary mb-3 bg-primary/10 inline-block px-2 py-1 rounded-md">{video.category}</p>
-              
-              <div className="flex items-center justify-between text-xs text-slate-500">
-                <div className="flex items-center gap-3">
-                  <span className="flex items-center gap-1"><Eye className="w-4 h-4" /> {video.views}</span>
-                  <span className="flex items-center gap-1"><ThumbsUp className="w-4 h-4" /> {video.likes}</span>
+              return (
+                <motion.div
+                  key={video.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="group relative bg-white dark:bg-slate-900 rounded-[1rem] overflow-hidden border border-slate-100 dark:border-slate-800 hover:border-primary/40 shadow-lg hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-2 z-10"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden cursor-pointer bg-slate-100 dark:bg-slate-900">
+                    {isVideoFile ? (
+                      <video
+                        src={mediaUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                      />
+                    ) : (
+                      <img
+                        src={mediaUrl}
+                        alt={video.categoryName || "Video"}
+                        className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                      />
+                    )}
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-50 group-hover:opacity-80 transition-opacity duration-500 pointer-events-none" />
+
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(var(--primary),0.5)] transform scale-90 group-hover:scale-100 transition-all duration-300 backdrop-blur-sm">
+                        <Play className="w-6 h-6 ml-1" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-5 lg:p-6 text-center relative z-20 bg-white dark:bg-slate-900 flex-1 flex flex-col justify-center border-t border-slate-100 dark:border-slate-800/50">
+                    <h3 className="font-extrabold text-xl lg:text-xl capitalize text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors duration-300">
+                      {video.categoryName}
+                    </h3>
+                  </div>
+                </motion.div>
+              );
+            })
+          )
+        ) : myLoading ? (
+          <div className="col-span-full flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : myError ? (
+          <div className="col-span-full text-center py-20 text-red-500 font-medium">
+            {myError}
+          </div>
+        ) : myVideos.length === 0 ? (
+          <div className="col-span-full text-center py-20 text-slate-500">
+            You haven't uploaded any videos yet. Click the Upload Video button
+            to get started!
+          </div>
+        ) : (
+          myVideos.map((video, idx) => {
+            const mediaUrl = video.thumbnail
+              ? getMediaUrl(video.thumbnail)
+              : getMediaUrl(video.video || "");
+            const isVideoFile =
+              mediaUrl.endsWith(".mp4") ||
+              mediaUrl.endsWith(".webm") ||
+              mediaUrl.endsWith(".m3u8");
+
+            return (
+              <motion.div
+                key={video.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="group relative bg-white dark:bg-slate-900 rounded-[1rem] overflow-hidden border border-slate-100 dark:border-slate-800 hover:border-primary/40 shadow-lg hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-2 z-10"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden cursor-pointer bg-slate-100 dark:bg-slate-900">
+                  {/* Status Badge */}
+                  <div className="absolute top-3 right-3 z-20">
+                    <span className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-lg shadow-sm backdrop-blur-md ${
+                      video.status === 'active' 
+                        ? 'bg-emerald-500/90 text-white' 
+                        : 'bg-amber-500/90 text-white'
+                    }`}>
+                      {video.status}
+                    </span>
+                  </div>
+
+                  {/* Views Badge */}
+                  <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 bg-black/50 backdrop-blur-md rounded-lg text-white text-xs font-medium">
+                    <Eye className="w-3.5 h-3.5" />
+                    {video.views || 0}
+                  </div>
+
+                  {isVideoFile ? (
+                    <video
+                      src={mediaUrl}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                    />
+                  ) : (
+                    <img
+                      src={mediaUrl}
+                      alt={video.videoTitle || "My Video"}
+                      className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                    />
+                  )}
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-50 group-hover:opacity-80 transition-opacity duration-500 pointer-events-none" />
+
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(var(--primary),0.5)] transform scale-90 group-hover:scale-100 transition-all duration-300 backdrop-blur-sm">
+                      <Play className="w-6 h-6 ml-1" />
+                    </div>
+                  </div>
                 </div>
-                <span>{video.uploadedDate}</span>
-              </div>
 
-              <div className="border-t border-slate-100 dark:border-slate-700 mt-4 pt-4 flex items-center gap-2">
-                {activeTab === "all" ? (
-                  <>
-                    <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors text-sm font-medium">
-                      <Heart className="w-4 h-4" /> Favorite
-                    </button>
-                    <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors text-sm font-medium">
-                      <Share2 className="w-4 h-4" /> Share
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-slate-50 dark:bg-slate-700/50 hover:bg-primary/10 hover:text-primary transition-colors text-sm font-medium">
+                <div className="p-5 relative z-20 bg-white dark:bg-slate-900 flex-1 flex flex-col justify-between border-t border-slate-100 dark:border-slate-800/50">
+                  <div>
+                    <h3 className="font-extrabold text-lg capitalize text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors duration-300 mb-1.5">
+                      {video.videoTitle}
+                    </h3>
+                    <div className="flex items-center gap-1.5 text-sm font-medium text-slate-500 line-clamp-1 mb-4">
+                      <MapPin className="w-3.5 h-3.5 text-primary" />
+                      {video.shopName}
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button 
+                      onClick={() => setIsUploadSidebarOpen(true)}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 text-sm font-bold"
+                    >
                       <Edit className="w-4 h-4" /> Edit
                     </button>
-                    <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-slate-50 dark:bg-slate-700/50 hover:bg-red-50 hover:text-red-600 transition-colors text-sm font-medium">
+                    <button className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-red-500 hover:bg-red-500 hover:text-white hover:shadow-lg hover:shadow-red-500/25 transition-all duration-300 text-sm font-bold">
                       <Trash2 className="w-4 h-4" /> Delete
                     </button>
-                    <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors text-sm font-medium">
-                      <Settings className="w-4 h-4" /> Stats
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        ))}
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })
+        )}
       </div>
+
+      {/* Upload Sidebar */}
+      <AnimatePresence>
+        {isUploadSidebarOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+              animate={{ opacity: 1, backdropFilter: "blur(4px)" }}
+              exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+              className="fixed inset-0 bg-slate-900/40 z-[100]"
+              onClick={() => setIsUploadSidebarOpen(false)}
+            />
+            <motion.div
+              initial={{ x: "100%", opacity: 0.5 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0.5 }}
+              transition={{
+                type: "spring",
+                damping: 30,
+                stiffness: 300,
+                mass: 0.8,
+              }}
+              className="fixed top-0 right-0 h-full w-full max-w-[32rem] bg-white dark:bg-slate-900 z-[101] shadow-2xl flex flex-col overflow-hidden border-l border-white/20 dark:border-slate-800/50"
+            >
+              <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800">
+                <div>
+                  <h2 className="font-bold text-xl font-heading">
+                    Upload New Video
+                  </h2>
+                  <p className="text-sm text-slate-500 mt-1">
+                    Share your experience with the community
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsUploadSidebarOpen(false)}
+                  className="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 rounded-full transition-all"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-6 flex-1 overflow-y-auto">
+                <form className="space-y-6">
+                  {/* Video Picker Card */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      Select Video File
+                    </label>
+                    <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer group">
+                      <div className="w-16 h-16 bg-white dark:bg-slate-700 rounded-full shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <VideoIcon className="w-8 h-8 text-slate-400 group-hover:text-primary transition-colors" />
+                      </div>
+                      <p className="font-bold text-slate-700 dark:text-slate-300">
+                        Click to upload video
+                      </p>
+                      <p className="text-xs text-slate-500 mt-2">
+                        MP4, WebM up to 50MB
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      Video Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g., Best Pizza in Town"
+                      className="w-full px-4 py-3 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-slate-900 dark:text-white"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      Description
+                    </label>
+                    <textarea
+                      placeholder="Tell us more about this video..."
+                      rows={3}
+                      className="w-full px-4 py-3 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-slate-900 dark:text-white resize-none"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      Select Shop
+                    </label>
+                    <select className="w-full px-4 py-3 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-slate-900 dark:text-white cursor-pointer">
+                      <option value="">Select a shop you manage</option>
+                      <option value="1">Dream Car Decors</option>
+                      <option value="2">Grocery shop</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      Shop Category
+                    </label>
+                    <select className="w-full px-4 py-3 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-slate-900 dark:text-white cursor-pointer">
+                      <option value="">Select category</option>
+                      <option value="automobile">Automobile</option>
+                      <option value="grocery">Grocery</option>
+                      <option value="restaurant">Restaurant</option>
+                    </select>
+                  </div>
+                </form>
+              </div>
+
+              <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
+                <button
+                  type="button"
+                  className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/30 active:scale-[0.98]"
+                >
+                  <Upload className="w-5 h-5" /> Submit Video
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

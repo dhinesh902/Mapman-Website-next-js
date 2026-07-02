@@ -204,9 +204,9 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-12 pb-16 overflow-x-hidden">
       {/* Top Banner Section (Full Width, 0 Radius) */}
-      <section className="relative w-full overflow-hidden">
+      <section className="relative w-full overflow-hidden bg-slate-900">
         {topBanners.length > 0 ? (
-          <div className="relative w-full h-[250px] sm:h-[350px] lg:h-[450px] group overflow-hidden">
+          <div className="relative w-full h-[500px] sm:h-[600px] lg:h-[85vh] lg:min-h-[700px] group overflow-hidden">
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.div
                 key={currentBannerIdx}
@@ -222,7 +222,7 @@ export default function Home() {
                   )}
                   alt="Top Banner"
                   fill
-                  className="object-cover rounded-none"
+                  className="object-cover object-center"
                   priority
                 />
               </motion.div>

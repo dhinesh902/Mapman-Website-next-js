@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import QueryProvider from "@/providers/query-provider";
+import { AuthProvider } from "@/providers/auth-provider";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -29,11 +30,13 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${outfit.variable} scroll-smooth`}>
       <body className="antialiased min-h-screen flex flex-col font-sans">
         <QueryProvider>
-          <Header />
-          <main className="flex-1 pt-[80px]">
-            {children}
-          </main>
-          <Footer />
+          <AuthProvider>
+            <Header />
+            <main className="flex-1 pt-[80px]">
+              {children}
+            </main>
+            <Footer />
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>
