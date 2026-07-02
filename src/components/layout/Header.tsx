@@ -33,7 +33,7 @@ export default function Header() {
         isScrolled ? "glass shadow-sm py-3" : "bg-transparent py-5"
       }`}
     >
-      <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
+      <div className="w-full px-2 md:px-4 lg:px-8 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="bg-primary p-2 rounded-xl group-hover:bg-primary/90 transition-colors">
@@ -74,10 +74,10 @@ export default function Header() {
           <button className="text-slate-600 hover:text-primary transition-colors">
             <Search className="w-5 h-5" />
           </button>
-          <button className="text-slate-600 hover:text-primary transition-colors relative">
+          <Link href="/notifications" className="text-slate-600 hover:text-primary transition-colors relative">
             <Bell className="w-5 h-5" />
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
-          </button>
+          </Link>
           <Link href="/profile">
             <div className="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden hover:ring-2 hover:ring-primary hover:ring-offset-2 transition-all cursor-pointer">
               <User className="w-5 h-5 text-slate-500 dark:text-slate-400" />
@@ -131,7 +131,9 @@ export default function Header() {
                 </Link>
                 <div className="flex gap-4 text-slate-500">
                   <Search className="w-5 h-5" />
-                  <Bell className="w-5 h-5" />
+                  <Link href="/notifications" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Bell className="w-5 h-5" />
+                  </Link>
                 </div>
               </div>
             </div>
