@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import QueryProvider from "@/providers/query-provider";
 import { AuthProvider } from "@/providers/auth-provider";
+import FloatingContact from "@/components/layout/FloatingContact";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <FloatingContact />
           </AuthProvider>
         </QueryProvider>
       </body>

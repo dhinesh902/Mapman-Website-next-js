@@ -64,3 +64,54 @@ export interface HomeResponse {
     shops?: Shop[];
   };
 }
+
+// ---------------------- Notification Model ----------------------
+
+export interface NotificationModel {
+  status?: number;
+  data?: NotificationData[];
+}
+
+export interface NotificationData {
+  id?: number;
+  userId?: number;
+  msgTitle?: string;
+  msgImage?: null | string;
+  msgLink?: string;
+  msgType?: string;
+  msgDesc?: string;
+  msgStatus?: string;
+  readStatus?: string;
+  openStatus?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+// -----------------------
+
+export interface ShopDetailModel {
+  status?: number;
+  data?: Data;
+}
+
+export interface Data {
+  shop?: Shop;
+  shopVideos?: ShopVideo[];
+  shopSavedAlready?: boolean;
+}
+
+export interface ShopVideo {
+  id?: number;
+  profileId?: number;
+  shopId?: number;
+  video?: string;
+  thumbnail?: string;
+  videoTitle?: string;
+  shopName?: string;
+  category?: string;
+  description?: string;
+  status?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  views?: number;
+}

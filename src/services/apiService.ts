@@ -33,6 +33,36 @@ export const getHomeData = async () => {
     throw error;
   }
 };
+
+export const getHomeCategories = async () => {
+  try {
+    const response = await apiService.get("/shop/home");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+};
+
+export const addNewCategoryApi = async (categoryName: string) => {
+  try {
+    const response = await apiService.post("/shop/addNewCategory", { categoryName });
+    return response.data;
+  } catch (error) {
+    console.error("Error adding category:", error);
+    throw error;
+  }
+};
+
+export const deleteCategoryApi = async (categoryName: string) => {
+  try {
+    const response = await apiService.post("/shop/deleteCategory", { categoryName });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting category:", error);
+    throw error;
+  }
+};
 export const searchShops = async (input: string) => {
   try {
     const response = await apiService.get(`/shop/nonauthendicateSearch?input=${input}`);
@@ -58,6 +88,40 @@ export const getMyVideos = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching my videos:", error);
+    throw error;
+  }
+};
+
+export const fetchShopApi = async () => {
+  try {
+    const response = await apiService.get("/shop/fetchShop");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching shops:", error);
+    throw error;
+  }
+};
+
+export const getShopById = async (shopId: string | number) => {
+  try {
+    const response = await apiService.post("/shop/getShopById", { shopId: Number(shopId) });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching shop details:", error);
+    throw error;
+  }
+};
+
+export const shopRegister = async (formData: FormData) => {
+  try {
+    const response = await apiService.post("/shop/shopRegister", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error registering/updating shop:", error);
     throw error;
   }
 };

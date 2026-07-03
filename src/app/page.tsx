@@ -478,9 +478,9 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1, duration: 0.5 }}
-                className="group relative bg-white dark:bg-slate-900 rounded-[1rem] overflow-hidden border border-slate-100 dark:border-slate-800 hover:border-primary/30 shadow-lg hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col"
+                className="group relative bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800/60 hover:border-primary/40 shadow-md hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-2 z-10"
               >
-                <div className="relative h-48 lg:h-56 overflow-hidden bg-slate-100 dark:bg-slate-800">
+                <div className="relative h-48 lg:h-56 overflow-hidden bg-slate-100 dark:bg-slate-800 m-2 rounded-[1.5rem]">
                   <Image
                     src={
                       shop.shopImage
@@ -489,7 +489,7 @@ export default function Home() {
                     }
                     alt={shop.shopName || "Shop"}
                     fill
-                    className={`object-cover transition-all duration-700 ${hasHoverImage ? 'group-hover:opacity-0 group-hover:scale-110' : 'group-hover:scale-110'}`}
+                    className={`object-cover transition-transform duration-700 ${hasHoverImage ? 'group-hover:opacity-0 group-hover:scale-110' : 'group-hover:scale-110'}`}
                   />
                   {hasHoverImage && (
                     <Image
@@ -500,19 +500,19 @@ export default function Home() {
                     />
                   )}
                   {/* Glassmorphism Overlays */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500 pointer-events-none" />
 
-                  <div className="absolute top-4 right-4 flex flex-col gap-2">
-                    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-2.5 py-1 rounded-xl text-xs font-bold flex items-center gap-1 shadow-lg text-slate-900 dark:text-white">
+                  <div className="absolute top-3 right-3 flex flex-col gap-2 z-20">
+                    <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg text-slate-900 dark:text-white border border-white/20">
                       <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" /> 4.5
                     </div>
                   </div>
 
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-10">
-                    <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1.5 rounded-full shadow-lg me-3">
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-20">
+                    <span className="text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1.5 rounded-xl shadow-lg truncate max-w-[50%]">
                       {shop.category}
                     </span>
-                    <div className={`flex items-center gap-1.5 text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg backdrop-blur-md border ${isOpen ? 'bg-emerald-500/30 text-emerald-100 border-emerald-500/50' : 'bg-red-500/30 text-red-100 border-red-500/50'}`}>
+                    <div className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-xl shadow-lg backdrop-blur-md border shrink-0 ${isOpen ? 'bg-emerald-500/30 text-emerald-100 border-emerald-500/50' : 'bg-red-500/30 text-red-100 border-red-500/50'}`}>
                       <Clock className="w-3 h-3" />
                       {isOpen ? 'Open' : 'Closed'}
                     </div>
@@ -520,20 +520,22 @@ export default function Home() {
                 </div>
 
                 <div className="p-5 lg:p-6 flex flex-col flex-1 relative bg-white dark:bg-slate-900 z-20">
-                  <h3 className="font-extrabold text-lg md:text-xl text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">
+                  <h3 className="font-extrabold text-xl md:text-xl text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">
                     {shop.shopName}
                   </h3>
 
-                  <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm mb-4 flex items-start gap-2 leading-relaxed">
-                    <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-primary" />
+                  <div className="text-slate-500 dark:text-slate-400 text-sm mb-5 flex items-start gap-2.5 leading-relaxed">
+                    <div className="bg-primary/10 p-1.5 rounded-lg text-primary mt-0.5 shrink-0">
+                      <MapPin className="w-3.5 h-3.5" />
+                    </div>
                     <span className="line-clamp-2 font-medium">{shop.address}</span>
-                  </p>
+                  </div>
 
-                  <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
-                    <button className="w-full bg-slate-50 hover:bg-primary text-slate-700 hover:text-white dark:bg-slate-800 dark:hover:bg-primary dark:text-slate-300 transition-all duration-300 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 group/btn">
+                  <div className="mt-auto pt-2">
+                    <Link href={`/shop/${shop.id}`} className="w-full bg-slate-50 hover:bg-gradient-to-r hover:from-primary hover:to-accent text-slate-700 hover:text-white dark:bg-slate-800 dark:hover:text-white transition-all duration-300 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 group/btn shadow-sm hover:shadow-lg hover:shadow-primary/25 border border-slate-100 dark:border-slate-700/50 hover:border-transparent">
                       View Details
                       <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </motion.div>

@@ -114,6 +114,29 @@ export default function ProfilePage() {
                 </motion.div>
              </div>
           </div>
+
+          {/* Quick Contact Cards */}
+          <div className="mt-12">
+             <h2 className="text-2xl font-bold font-heading mb-6">Quick Contact</h2>
+             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6">
+                <a href="sms:+919342376760" className="bg-white dark:bg-slate-800 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center gap-4 text-center group">
+                  <img src="https://cdn-icons-png.flaticon.com/128/1817/1817646.png" alt="SMS" className="w-12 h-12 object-contain group-hover:scale-110 transition-transform" />
+                  <span className="font-bold text-sm text-slate-700 dark:text-slate-300">SMS</span>
+                </a>
+                <a href="mailto:mapman6760@gmail.com" className="bg-white dark:bg-slate-800 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center gap-4 text-center group">
+                  <img src="https://cdn-icons-png.flaticon.com/128/5968/5968534.png" alt="Email" className="w-12 h-12 object-contain group-hover:scale-110 transition-transform" />
+                  <span className="font-bold text-sm text-slate-700 dark:text-slate-300">Email</span>
+                </a>
+                <a href="tel:+919342376760" className="bg-white dark:bg-slate-800 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center gap-4 text-center group">
+                  <img src="https://cdn-icons-png.flaticon.com/128/724/724664.png" alt="Call" className="w-12 h-12 object-contain group-hover:scale-110 transition-transform" />
+                  <span className="font-bold text-sm text-slate-700 dark:text-slate-300">Call</span>
+                </a>
+                <a href="https://wa.me/919342376760" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-slate-800 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center gap-4 text-center group">
+                  <img src="https://cdn-icons-png.flaticon.com/128/5968/5968841.png" alt="WhatsApp" className="w-12 h-12 object-contain group-hover:scale-110 transition-transform" />
+                  <span className="font-bold text-sm text-slate-700 dark:text-slate-300">WhatsApp</span>
+                </a>
+             </div>
+          </div>
           
         </div>
       </div>

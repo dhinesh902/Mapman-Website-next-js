@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Search, Filter, Star, Navigation, MapPin, Loader2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 // Dynamically import the map component with SSR disabled
 const MapView = dynamic(() => import("./MapView"), {
@@ -188,10 +189,13 @@ export default function MapPage() {
                     {shop.address}
                   </p>
 
-                  <div className="mt-auto pt-2">
-                    <button className="w-full bg-slate-100 hover:bg-primary hover:text-white dark:bg-slate-700 dark:hover:bg-primary text-slate-700 dark:text-slate-200 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                  <div className="mt-auto pt-2 flex gap-2">
+                    <button className="flex-1 bg-slate-100 hover:bg-primary hover:text-white dark:bg-slate-700 dark:hover:bg-primary text-slate-700 dark:text-slate-200 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm">
                       <Navigation className="w-3.5 h-3.5" /> Navigate
                     </button>
+                    <Link href={`/shop/${shop.id}`} className="flex-1 bg-primary text-white hover:bg-primary/90 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center transition-colors shadow-sm">
+                      View Details
+                    </Link>
                   </div>
                 </div>
               </div>

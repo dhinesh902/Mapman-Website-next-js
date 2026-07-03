@@ -253,23 +253,23 @@ export default function VideosPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="group relative bg-white dark:bg-slate-900 rounded-[1rem] overflow-hidden border border-slate-100 dark:border-slate-800 hover:border-primary/40 shadow-lg hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-2 z-10"
+                className="group relative bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800/60 hover:border-primary/40 shadow-md hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-2 z-10"
               >
-                <div className="relative aspect-[4/3] overflow-hidden cursor-pointer bg-slate-100 dark:bg-slate-900">
+                <div className="relative aspect-[4/3] overflow-hidden cursor-pointer bg-slate-100 dark:bg-slate-800 m-2 rounded-[1.5rem]">
                   {/* Status Badge */}
                   <div className="absolute top-3 right-3 z-20">
-                    <span className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-lg shadow-sm backdrop-blur-md ${
+                    <span className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-xl shadow-lg backdrop-blur-md border ${
                       video.status === 'active' 
-                        ? 'bg-emerald-500/90 text-white' 
-                        : 'bg-amber-500/90 text-white'
+                        ? 'bg-emerald-500/30 text-emerald-100 border-emerald-500/50' 
+                        : 'bg-amber-500/30 text-amber-100 border-amber-500/50'
                     }`}>
                       {video.status}
                     </span>
                   </div>
 
                   {/* Views Badge */}
-                  <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 bg-black/50 backdrop-blur-md rounded-lg text-white text-xs font-medium">
-                    <Eye className="w-3.5 h-3.5" />
+                  <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-3 py-1.5 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl text-white text-xs font-bold shadow-lg">
+                    <Eye className="w-4 h-4" />
                     {video.views || 0}
                   </div>
 
@@ -290,35 +290,37 @@ export default function VideosPage() {
                     />
                   )}
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-50 group-hover:opacity-80 transition-opacity duration-500 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500 pointer-events-none" />
 
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(var(--primary),0.5)] transform scale-90 group-hover:scale-100 transition-all duration-300 backdrop-blur-sm">
-                      <Play className="w-6 h-6 ml-1" />
+                    <div className="w-16 h-16 bg-white/20 text-white rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.2)] transform scale-90 group-hover:scale-100 transition-all duration-300 backdrop-blur-md border border-white/30">
+                      <Play className="w-6 h-6 ml-1 fill-white" />
                     </div>
                   </div>
                 </div>
 
-                <div className="p-5 relative z-20 bg-white dark:bg-slate-900 flex-1 flex flex-col justify-between border-t border-slate-100 dark:border-slate-800/50">
+                <div className="p-5 lg:p-6 relative z-20 bg-white dark:bg-slate-900 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="font-extrabold text-lg capitalize text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors duration-300 mb-1.5">
+                    <h3 className="font-extrabold text-lg md:text-xl capitalize text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors duration-300 mb-2">
                       {video.videoTitle}
                     </h3>
-                    <div className="flex items-center gap-1.5 text-sm font-medium text-slate-500 line-clamp-1 mb-4">
-                      <MapPin className="w-3.5 h-3.5 text-primary" />
+                    <div className="flex items-center gap-2.5 text-sm font-medium text-slate-500 line-clamp-1 mb-6">
+                      <div className="bg-primary/10 p-1.5 rounded-lg text-primary">
+                        <MapPin className="w-3.5 h-3.5" />
+                      </div>
                       {video.shopName}
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center gap-3 mt-auto pt-4 border-t border-slate-100 dark:border-slate-800/60">
                     <button 
                       onClick={() => setIsUploadSidebarOpen(true)}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 text-sm font-bold"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 text-sm font-bold border border-slate-200/50 dark:border-slate-700 hover:border-transparent group/edit"
                     >
-                      <Edit className="w-4 h-4" /> Edit
+                      <Edit className="w-4 h-4 group-hover/edit:rotate-12 transition-transform" /> Edit
                     </button>
-                    <button className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-red-500 hover:bg-red-500 hover:text-white hover:shadow-lg hover:shadow-red-500/25 transition-all duration-300 text-sm font-bold">
-                      <Trash2 className="w-4 h-4" /> Delete
+                    <button className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-red-500 hover:bg-red-500 hover:text-white hover:shadow-lg hover:shadow-red-500/25 transition-all duration-300 text-sm font-bold border border-slate-200/50 dark:border-slate-700 hover:border-transparent group/del">
+                      <Trash2 className="w-4 h-4 group-hover/del:scale-110 transition-transform" /> Delete
                     </button>
                   </div>
                 </div>
