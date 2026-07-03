@@ -145,3 +145,13 @@ export const verifyOtpApi = async (phoneNumber: string, otp: number): Promise<Ve
     throw error;
   }
 };
+
+export const fetchNotificationsApi = async (page: number = 1) => {
+  try {
+    const response = await apiService.get(`/shop/fetchNotifications?page=${page}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    throw error;
+  }
+};
