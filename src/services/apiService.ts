@@ -98,6 +98,55 @@ export const getMyVideos = async () => {
   }
 };
 
+export const fetchMyViewedVideos = async (page: number = 1) => {
+  try {
+    const response = await apiService.get(`/shop/fetchMyViewedVideos?page=${page}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching viewed videos:", error);
+    throw error;
+  }
+};
+
+export const fetchMySavedVideos = async (page: number = 1) => {
+  try {
+    const response = await apiService.get(`/shop/fetchMySavedVideos?page=${page}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching saved videos:", error);
+    throw error;
+  }
+};
+
+export const fetchSavedShops = async (page: number = 1) => {
+  try {
+    const response = await apiService.get(`/shop/fetchSavedShops?page=${page}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching saved shops:", error);
+    throw error;
+  }
+};
+export const saveOthersVideosApi = async (videoId: number, status: string) => {
+  try {
+    const response = await apiService.post("/shop/saveOthersVideos", { videoId, status });
+    return response.data;
+  } catch (error) {
+    console.error("Error saving video:", error);
+    throw error;
+  }
+};
+
+export const saveShopApi = async (shopId: number, status: string) => {
+  try {
+    const response = await apiService.post("/shop/saveShop", { shopId, status });
+    return response.data;
+  } catch (error) {
+    console.error("Error saving shop:", error);
+    throw error;
+  }
+};
+
 export const fetchShopApi = async () => {
   try {
     const response = await apiService.get("/shop/fetchShop");
