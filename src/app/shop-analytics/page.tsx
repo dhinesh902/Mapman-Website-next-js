@@ -2,134 +2,248 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Video, Eye, Loader2, PlayCircle, Clock } from "lucide-react";
-import { getMyVideos } from "@/services/apiService";
-import { ShopVideo } from "@/models/home_model";
+import {
+  Video,
+  Eye,
+  Loader2,
+  PlayCircle,
+  Clock,
+  TrendingUp,
+  BarChart3,
+  ChevronRight,
+} from "lucide-react";
+import { getShopAnalyticsApi } from "@/services/apiService";
+import { ShopAnalyticsModel, TotalVideo } from "@/models/videos_model";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ShopAnalyticsPage() {
   const [loading, setLoading] = useState(true);
-  const [videos, setVideos] = useState<ShopVideo[]>([]);
+  const [videos, setVideos] = useState<TotalVideo[]>([]);
   const [totalViews, setTotalViews] = useState(0);
 
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
         setLoading(true);
-        const res = await getMyVideos();
-        const videoList: ShopVideo[] = res?.data?.shopVideos || [];
+        const res: ShopAnalyticsModel = await getShopAnalyticsApi();
+        const videoList = res?.data?.totalVideos || [];
         setVideos(videoList);
-        
-        const views = videoList.reduce((acc, video) => acc + (video.views || 0), 0);
-        setTotalViews(views);
+        setTotalViews(res?.data?.totalViews || 0);
       } catch (error) {
         console.error("Failed to fetch shop analytics", error);
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchAnalytics();
   }, []);
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
-        <Loader2 className="w-10 h-10 animate-spin text-primary" />
-        <p className="text-slate-500 font-medium text-lg">Loading analytics...</p>
+      <div className="flex flex-col items-center justify-center min-h-[70vh] gap-4">
+        <div className="relative">
+          <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse" />
+          <Loader2 className="w-12 h-12 animate-spin text-primary relative z-10" />
+        </div>
+        <p className="text-slate-500 font-bold tracking-widest uppercase text-sm animate-pulse mt-2">
+          Loading Analytics...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 md:px-6 py-8 pb-8 max-w-7xl font-sans">
-      <div className="mb-10">
-        <h1 className="text-4xl font-extrabold font-heading text-slate-900 dark:text-white mb-2 tracking-tight">Shop Analytics</h1>
-        <p className="text-slate-500 text-lg">Track your video performance and insights.</p>
-      </div>
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
+      {/* Top Header Background */}
+      <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-primary/5 via-primary/5 to-transparent dark:from-primary/10 dark:via-primary/5 -z-10 pointer-events-none" />
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none flex items-center gap-6 group hover:-translate-y-1 transition-all duration-300"
-        >
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-            <Video className="w-8 h-8" />
-          </div>
+      <div className="container mx-auto px-4 md:px-6 py-10 pb-20 max-w-7xl font-sans relative">
+        {/* Breadcrumb & Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <p className="text-slate-500 font-semibold mb-1 text-sm uppercase tracking-wider">Total Videos</p>
-            <h2 className="text-4xl font-black text-slate-900 dark:text-white">{videos.length}</h2>
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none flex items-center gap-6 group hover:-translate-y-1 transition-all duration-300"
-        >
-          <div className="w-16 h-16 rounded-2xl bg-accent/10 text-accent flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-accent group-hover:text-white transition-all duration-300">
-            <Eye className="w-8 h-8" />
-          </div>
-          <div>
-            <p className="text-slate-500 font-semibold mb-1 text-sm uppercase tracking-wider">Total Views</p>
-            <h2 className="text-4xl font-black text-slate-900 dark:text-white">{totalViews.toLocaleString()}</h2>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Video List */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-xl shadow-slate-200/30 dark:shadow-none">
-        <div className="p-6 md:p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-          <h2 className="text-2xl font-bold font-heading">Uploaded Videos</h2>
-        </div>
-        
-        <div className="p-6 md:p-8">
-          {videos.length === 0 ? (
-            <div className="text-center py-16 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
-              <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-                <PlayCircle className="w-8 h-8 text-slate-400" />
+            <div className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-4">
+              <Link
+                href="/profile"
+                className="hover:text-primary transition-colors"
+              >
+                Profile
+              </Link>
+              <ChevronRight className="w-4 h-4" />
+              <span className="text-primary font-bold">Analytics</span>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-extrabold font-heading text-slate-900 dark:text-white tracking-tight flex items-center gap-4">
+              Shop Analytics
+              <div className="hidden md:flex px-3 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm rounded-lg items-center gap-1.5 font-bold shadow-sm">
+                <TrendingUp className="w-4 h-4" /> Live
               </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No Videos Found</h3>
-              <p className="text-slate-500 max-w-sm mx-auto">You haven't uploaded any videos for your shop yet.</p>
+            </h1>
+          </div>
+        </div>
+
+        {/* Premium Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-slate-900 rounded-[2rem] p-8 border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
+            <div className="flex items-center gap-6 relative z-10">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br p-4 from-primary to-blue-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-primary/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/5540/5540081.png"
+                  alt="video"
+                />
+              </div>
+              <div>
+                <p className="text-slate-500 font-bold mb-1 text-sm uppercase tracking-widest">
+                  Total Uploads
+                </p>
+                <div className="flex items-end gap-3">
+                  <h2 className="text-5xl font-black text-slate-900 dark:text-white leading-none tracking-tight">
+                    {videos.length}
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-white dark:bg-slate-900 rounded-[2rem] p-8 border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-accent/10 to-transparent rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
+            <div className="flex items-center gap-6 relative z-10">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br p-4 from-accent to-orange-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-accent/30 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/2235/2235419.png"
+                  alt="view"
+                />
+              </div>
+              <div>
+                <p className="text-slate-500 font-bold mb-1 text-sm uppercase tracking-widest">
+                  Total Views
+                </p>
+                <div className="flex items-end gap-3">
+                  <h2 className="text-5xl font-black text-slate-900 dark:text-white leading-none tracking-tight">
+                    {totalViews.toLocaleString()}
+                  </h2>
+                  <span className="text-emerald-500 font-bold text-sm bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-md mb-1">
+                    +24%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Video List Section */}
+        <div>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold font-heading text-slate-900 dark:text-white flex items-center gap-3">
+              Videos
+            </h2>
+          </div>
+
+          {videos.length === 0 ? (
+            <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-[2rem] border border-dashed border-slate-300 dark:border-slate-700 shadow-sm">
+              <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                <PlayCircle className="w-10 h-10 text-slate-400" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                No Videos Found
+              </h3>
+              <p className="text-slate-500 max-w-md mx-auto">
+                You haven't uploaded any videos for your shop yet. Start
+                uploading to see your analytics grow!
+              </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-4 gap-6 lg:gap-8">
               {videos.map((video, idx) => (
                 <motion.div
                   key={video.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="group flex flex-col bg-slate-50 dark:bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-lg transition-all"
+                  className="group bg-white dark:bg-slate-900 rounded-[1.5rem] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-lg shadow-slate-200/40 dark:shadow-none hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1 transition-all duration-300 flex flex-col"
                 >
-                  <div className="relative aspect-video bg-black/5 flex items-center justify-center overflow-hidden">
+                  <div className="relative aspect-video bg-black/5 overflow-hidden">
                     {video.thumbnail ? (
-                      <Image src={video.thumbnail.startsWith('http') ? video.thumbnail : `https://api.mapman.in${video.thumbnail}`} alt={video.videoTitle || "Thumbnail"} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <Image
+                        src={
+                          video.thumbnail.startsWith("http")
+                            ? video.thumbnail
+                            : `https://api.mapman.in${video.thumbnail}`
+                        }
+                        alt={video.videoTitle || "Thumbnail"}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
                     ) : (
-                      <PlayCircle className="w-12 h-12 text-slate-300" />
+                      <div className="absolute inset-0 flex items-center justify-center bg-slate-100 dark:bg-slate-800">
+                        <PlayCircle className="w-12 h-12 text-slate-300" />
+                      </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
-                    
-                    <div className="absolute bottom-3 right-3 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-lg text-white text-xs font-bold flex items-center gap-1.5 shadow-sm">
-                      <Eye className="w-3.5 h-3.5" /> {video.views || 0}
+
+                    {/* Hover Overlay with Play Button */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                      <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40 transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                        <PlayCircle className="w-8 h-8 text-white ml-1" />
+                      </div>
+                    </div>
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 pointer-events-none" />
+
+                    <div className="absolute top-4 left-4 z-20">
+                      <span className="text-[10px] font-bold text-white bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full uppercase tracking-wider border border-white/10 shadow-sm">
+                        {video.category || "General"}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between">
+                      <h3 className="font-bold text-lg text-white line-clamp-1 drop-shadow-md pr-2">
+                        {video.videoTitle || "Untitled Video"}
+                      </h3>
                     </div>
                   </div>
-                  
-                  <div className="p-5 flex flex-col flex-1">
-                    <h3 className="font-bold text-lg mb-2 line-clamp-1 text-slate-900 dark:text-white">{video.videoTitle || "Untitled Video"}</h3>
-                    <p className="text-sm text-slate-500 mb-4 line-clamp-2 leading-relaxed flex-1">
+
+                  <div className="p-6 flex flex-col flex-1 bg-white dark:bg-slate-900">
+                    <p className="text-sm text-slate-500 mb-6 line-clamp-2 leading-relaxed flex-1">
                       {video.description || "No description provided."}
                     </p>
-                    
-                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-200 dark:border-slate-700">
-                      <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-md">{video.category || "General"}</span>
-                      {video.createdAt && (
-                        <span className="text-xs text-slate-400 font-medium flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> {new Date(video.createdAt).toLocaleDateString()}
+
+                    <div className="flex items-center justify-between pt-5 border-t border-slate-100 dark:border-slate-800">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">
+                          Total Views
                         </span>
+                        <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
+                          <Eye className="w-4 h-4 text-accent" />{" "}
+                          {video.viewCount?.toLocaleString() || 0}
+                        </div>
+                      </div>
+
+                      {video.createdAt && (
+                        <div className="flex flex-col items-end">
+                          <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">
+                            Uploaded
+                          </span>
+                          <span className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                            {new Date(video.createdAt).toLocaleDateString(
+                              undefined,
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              },
+                            )}
+                          </span>
+                        </div>
                       )}
                     </div>
                   </div>

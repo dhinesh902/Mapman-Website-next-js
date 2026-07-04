@@ -103,7 +103,7 @@ export default function NotificationSidebar({
               stiffness: 300,
               mass: 0.8,
             }}
-            className="fixed top-0 right-0 w-full max-w-md h-full bg-white dark:bg-slate-900 z-[101] shadow-[[-20px_0_40px_rgba(0,0,0,0.1)]] dark:shadow-[[-20px_0_40px_rgba(0,0,0,0.5)]] flex flex-col font-sans rounded-l-[2rem] overflow-hidden border-l border-slate-200/50 dark:border-slate-800/50"
+            className="fixed top-0 right-0 w-full max-w-md h-full bg-white dark:bg-slate-900 z-[101] shadow-[[-20px_0_40px_rgba(0,0,0,0.1)]] dark:shadow-[[-20px_0_40px_rgba(0,0,0,0.5)]] flex flex-col font-sans rounded-l-[0rem] overflow-hidden border-l border-slate-200/50 dark:border-slate-800/50"
           >
             {/* Header */}
             <div className="relative p-8 pb-6 border-b border-slate-100 dark:border-slate-800/60 overflow-hidden">

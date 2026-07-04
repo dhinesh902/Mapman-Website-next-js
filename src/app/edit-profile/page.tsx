@@ -1,40 +1,99 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Save, Camera, X, User, CheckCircle2 } from "lucide-react";
+import { Save, Camera, X, User, CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { getProfileApi, updateProfileApi } from "@/services/apiService";
 
 export default function EditProfilePage() {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm();
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [statesDistricts, setStatesDistricts] = useState<Record<string, string[]>>({});
+  
+  const selectedState = watch("state");
 
-  const onSubmit = (data: any) => {
-    setSuccess(true);
-    setTimeout(() => setSuccess(false), 3000);
+  useEffect(() => {
+    // Fetch profile and states JSON concurrently
+    const fetchData = async () => {
+      try {
+        const [profileRes, statesRes] = await Promise.all([
+          getProfileApi(),
+          fetch("/states_districts.json").then(res => res.json())
+        ]);
+        
+        if (statesRes) {
+          setStatesDistricts(statesRes);
+        }
+
+        if (profileRes?.data) {
+          const p = profileRes.data;
+          setValue("username", p.userName || "");
+          setValue("email", p.email || "");
+          setValue("phone", p.phone || "");
+          setValue("state", p.state || "");
+          setValue("district", p.district || "");
+          if (p.profilePic) {
+            setPreview(p.profilePic.startsWith('http') ? p.profilePic : `https://api.mapman.in${p.profilePic}`);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [setValue]);
+
+  const onSubmit = async (data: any) => {
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("userName", data.username);
+      formData.append("email", data.email);
+      formData.append("state", data.state);
+      formData.append("district", data.district);
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
+      
+      const res = await updateProfileApi(formData);
+      if (res?.status === 200 || res?.status === 201 || res?.data) {
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 3000);
+      }
+    } catch (error) {
+      console.error("Error updating profile", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setImageFile(file);
       const url = URL.createObjectURL(file);
       setPreview(url);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 px-4 md:px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 px-0 md:px-2 relative overflow-hidden">
       {/* Background Decorative Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent/20 blur-[120px] pointer-events-none" />
 
-      <div className="container mx-auto max-w-4xl relative z-10">
+      <div className="container mx-auto max-w-5xl relative z-10 px-4 md:px-0">
         <div className="flex items-center justify-between mb-10">
           <div>
             <h1 className="text-4xl font-extrabold font-heading text-slate-900 dark:text-white">
@@ -64,12 +123,13 @@ export default function EditProfilePage() {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 md:p-10 rounded-[2.5rem] border border-white/50 dark:border-slate-700/50 shadow-2xl shadow-slate-200/50 dark:shadow-none space-y-8 relative overflow-hidden"
+          className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-6 md:p-10 rounded-[2.5rem] border border-white/50 dark:border-slate-700/50 shadow-2xl shadow-slate-200/50 dark:shadow-none relative overflow-hidden"
         >
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-bl-full -z-10" />
 
-          {/* Photo Upload */}
-          <div className="flex flex-col items-center justify-center mb-8 relative">
+          <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
+            {/* Photo Upload (Left Side) */}
+            <div className="md:w-1/3 flex flex-col items-center border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700/50 pb-8 md:pb-0 md:pr-8">
             <div className="relative w-36 h-36 rounded-full border-[6px] border-white dark:border-slate-800 shadow-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0 group">
               {preview ? (
                 <img
@@ -96,23 +156,26 @@ export default function EditProfilePage() {
             {preview && (
               <button
                 type="button"
-                onClick={() => setPreview(null)}
+                onClick={() => { setPreview(null); setImageFile(null); }}
                 className="text-red-500 text-sm font-bold mt-4 hover:underline"
               >
                 Remove Photo
               </button>
             )}
+            <div className="mt-8 text-center text-sm text-slate-500 font-medium hidden md:block max-w-[200px]">
+               Update your profile picture to easily be recognized by others.
+            </div>
           </div>
 
-          {/* Fields */}
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="col-span-full">
+          {/* Fields (Right Side) */}
+          <div className="md:w-2/3 flex flex-col">
+            <div className="grid md:grid-cols-2 gap-6 flex-1">
+              <div className="col-span-full">
               <label className="block text-sm font-bold mb-2 text-slate-700 dark:text-slate-300 ml-2">
                 Username
               </label>
               <input
                 {...register("username", { required: true })}
-                defaultValue="johndoe123"
                 placeholder="Enter username"
                 className="w-full p-4 md:p-5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all font-medium shadow-inner"
               />
@@ -128,7 +191,6 @@ export default function EditProfilePage() {
                   pattern: /^\S+@\S+$/i,
                 })}
                 type="email"
-                defaultValue="john.doe@example.com"
                 placeholder="Email"
                 className="w-full p-4 md:p-5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all font-medium shadow-inner"
               />
@@ -140,10 +202,9 @@ export default function EditProfilePage() {
               </label>
               <input
                 {...register("phone", { required: true })}
-                defaultValue="+91 9876543210"
                 placeholder="Mobile Number"
-                maxLength={10}
-                className="w-full p-4 md:p-5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all font-medium shadow-inner"
+                readOnly
+                className="w-full p-4 md:p-5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none text-slate-500 cursor-not-allowed font-medium shadow-inner"
               />
             </div>
 
@@ -151,40 +212,50 @@ export default function EditProfilePage() {
               <label className="block text-sm font-bold mb-2 text-slate-700 dark:text-slate-300 ml-2">
                 State
               </label>
-              <input
+              <select
                 {...register("state")}
-                defaultValue="Tamil Nadu"
-                placeholder="State"
-                className="w-full p-4 md:p-5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all font-medium shadow-inner"
-              />
+                className="w-full p-4 md:p-5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all font-medium shadow-inner appearance-none"
+              >
+                <option value="">Select State</option>
+                {Object.keys(statesDistricts).map((state) => (
+                  <option key={state} value={state}>{state}</option>
+                ))}
+              </select>
             </div>
 
             <div>
               <label className="block text-sm font-bold mb-2 text-slate-700 dark:text-slate-300 ml-2">
                 District
               </label>
-              <input
+              <select
                 {...register("district")}
-                defaultValue="Chennai"
-                placeholder="District"
-                className="w-full p-4 md:p-5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all font-medium shadow-inner"
-              />
+                disabled={!selectedState || !statesDistricts[selectedState]}
+                className="w-full p-4 md:p-5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all font-medium shadow-inner appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <option value="">Select District</option>
+                {selectedState && statesDistricts[selectedState]?.map((district) => (
+                  <option key={district} value={district}>{district}</option>
+                ))}
+              </select>
             </div>
-          </div>
+              </div>
 
-          <div className="pt-8 flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/profile"
-              className="w-full sm:w-1/3 py-4 md:py-5 text-center bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-2xl font-bold transition-all shadow-sm"
-            >
-              Cancel
-            </Link>
-            <button
-              type="submit"
-              className="w-full sm:w-2/3 bg-gradient-to-r from-primary to-accent text-white py-4 md:py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-xl shadow-primary/25 text-lg"
-            >
-              <Save className="w-5 h-5" /> Save Changes
-            </button>
+              <div className="pt-8 mt-auto flex flex-col sm:flex-row gap-4 border-t border-slate-100 dark:border-slate-800 mt-8">
+                <Link
+                  href="/profile"
+                  className="w-full sm:w-1/3 py-4 md:py-5 text-center bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-2xl font-bold transition-all shadow-sm"
+                >
+                  Cancel
+                </Link>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full sm:w-2/3 bg-gradient-to-r from-primary to-accent text-white py-4 md:py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-xl shadow-primary/25 text-lg"
+                >
+                  {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-5 h-5" /> Save Changes</>}
+                </button>
+              </div>
+            </div>
           </div>
         </form>
       </div>

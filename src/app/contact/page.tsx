@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-  import {Mail,
+import {
+  Mail,
   Phone,
   MapPin,
   Send,
@@ -103,7 +104,7 @@ export default function ContactPage() {
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Contact Info & Map */}
           <div className="lg:col-span-5 space-y-8">
-            <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-xl border border-white/50 dark:border-slate-800 space-y-8">
+            <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 rounded-[1.5rem] shadow-xl border border-white/50 dark:border-slate-800 space-y-8">
               <h2 className="text-2xl font-bold font-heading mb-2">
                 Contact Details
               </h2>
@@ -113,13 +114,25 @@ export default function ContactPage() {
                     <Phone className="text-primary group-hover:text-white w-6 h-6 transition-colors duration-300" />
                   </div>
                   <div>
-                    <p className="font-semibold text-lg mb-1">Phone & WhatsApp</p>
+                    <p className="font-semibold text-lg mb-1">
+                      Phone & WhatsApp
+                    </p>
                     <div className="flex items-center gap-3 mt-1">
-                      <a href="tel:+919342376760" className="text-slate-500 dark:text-slate-400 font-medium hover:text-primary transition-colors flex items-center gap-1">
+                      <a
+                        href="tel:+919342376760"
+                        className="text-slate-500 dark:text-slate-400 font-medium hover:text-primary transition-colors flex items-center gap-1"
+                      >
                         +91 9342376760
                       </a>
-                      <span className="text-slate-300 dark:text-slate-700">|</span>
-                      <a href="https://wa.me/919342376760" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-500 hover:text-emerald-700 font-medium flex items-center gap-1">
+                      <span className="text-slate-300 dark:text-slate-700">
+                        |
+                      </span>
+                      <a
+                        href="https://wa.me/919342376760"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-emerald-600 dark:text-emerald-500 hover:text-emerald-700 font-medium flex items-center gap-1"
+                      >
                         <MessageCircle className="w-4 h-4" /> WhatsApp
                       </a>
                     </div>
@@ -160,9 +173,7 @@ export default function ContactPage() {
                     <MapPin className="text-primary group-hover:text-white w-6 h-6 transition-colors duration-300" />
                   </div>
                   <div>
-                    <p className="font-semibold text-lg mb-1">
-                      Location
-                    </p>
+                    <p className="font-semibold text-lg mb-1">Location</p>
                     <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
                       Coimbatore, Tamilnadu India.
                     </p>
@@ -186,7 +197,7 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div className="lg:col-span-7">
-            <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 md:p-12 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-white/50 dark:border-slate-800">
+            <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 md:p-12 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-white/50 dark:border-slate-800">
               <div className="mb-10">
                 <h2 className="text-3xl font-extrabold mb-3 font-heading">
                   Send a Message
@@ -299,8 +310,7 @@ export default function ContactPage() {
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <section className="container mx-auto px-4 md:px-6 pt-16">
+        {/* <section className="container mx-auto px-4 md:px-6 pt-16">
           <h2 className="text-3xl font-bold text-center mb-10 font-heading">
             Frequently Asked Questions
           </h2>
@@ -336,7 +346,7 @@ export default function ContactPage() {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
       </div>
     </div>
   );

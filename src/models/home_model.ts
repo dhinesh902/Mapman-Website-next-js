@@ -131,3 +131,23 @@ export interface ShopVideo {
   updatedAt?: Date;
   views?: number;
 }
+
+// ----------------------
+
+export interface ProfileModel {
+  status?: number;
+  data?: ProfileData;
+}
+
+export interface ProfileData {
+  id?: number;
+  userName?: string;
+  profilePic?: string;
+  phone?: string;
+  email?: string;
+  points?: number;
+  fcmToken?: string;
+  state?: string;
+  district?: string;
+  country?: string;
+}

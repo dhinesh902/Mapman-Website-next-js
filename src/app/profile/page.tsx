@@ -13,9 +13,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NotificationSidebar from "@/components/profile/NotificationSidebar";
-import { Eye } from "lucide-react";
+import ReportIssueSidebar from "@/components/profile/ReportIssueSidebar";
+import { Eye, Loader2 } from "lucide-react";
+import { logoutApi, deleteAccountApi, getProfileApi } from "@/services/apiService";
 
 export default function ProfilePage() {
   const stats = [
@@ -51,6 +53,54 @@ export default function ProfilePage() {
 
   const [isNotificationSidebarOpen, setIsNotificationSidebarOpen] =
     useState(false);
+  const [isReportIssueOpen, setIsReportIssueOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await getProfileApi();
+        if (res?.data) {
+          setProfile(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch profile", error);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      setActionLoading(true);
+      await logoutApi();
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Still clear token and redirect on fail just in case
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      setActionLoading(true);
+      await deleteAccountApi();
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Delete account failed:", error);
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8 pb-8 max-w-6xl">
@@ -60,13 +110,17 @@ export default function ProfilePage() {
           <div className="bg-slate-950 dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-800 shadow-2xl flex flex-col items-center text-center relative overflow-hidden text-white">
             <div className="absolute top-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-[60px]" />
             <div className="relative w-32 h-32 rounded-full border-4 border-white/10 shadow-2xl mb-5 flex items-center justify-center bg-slate-800 overflow-hidden group">
-              <User className="w-16 h-16 text-slate-400 group-hover:scale-110 transition-transform duration-500" />
+              {profile?.profilePic ? (
+                <img src={profile.profilePic.startsWith('http') ? profile.profilePic : `https://api.mapman.in${profile.profilePic}`} alt="Profile" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              ) : (
+                <User className="w-16 h-16 text-slate-400 group-hover:scale-110 transition-transform duration-500" />
+              )}
             </div>
             <h1 className="text-3xl font-extrabold font-heading mb-1 text-white">
-              John Doe
+              {profile?.userName || "Loading..."}
             </h1>
             <p className="text-slate-400 font-medium mb-6">
-              john.doe@example.com
+              {profile?.email || "..."}
             </p>
 
             <Link
@@ -103,7 +157,7 @@ export default function ProfilePage() {
               <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" />
             </Link>
             <Link
-              href="/videos"
+              href="/viewed-videos"
               className="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-2xl transition-colors group"
             >
               <span className="font-semibold flex items-center gap-4 text-slate-700 dark:text-slate-200">
@@ -114,7 +168,10 @@ export default function ProfilePage() {
               </span>
               <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" />
             </Link>
-            <button className="flex items-center justify-between p-4 hover:bg-red-50 text-red-600 dark:hover:bg-red-500/10 rounded-2xl transition-colors group mt-2 border border-transparent hover:border-red-100 dark:hover:border-red-500/20 w-full text-left">
+            <button
+              onClick={() => setIsLogoutModalOpen(true)}
+              className="flex items-center justify-between p-4 hover:bg-red-50 text-red-600 dark:hover:bg-red-500/10 rounded-2xl transition-colors group mt-2 border border-transparent hover:border-red-100 dark:hover:border-red-500/20 w-full text-left"
+            >
               <span className="font-semibold flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center group-hover:bg-red-100 dark:group-hover:bg-red-500/20 transition-colors">
                   <LogOut className="w-5 h-5" />
@@ -122,7 +179,10 @@ export default function ProfilePage() {
                 Logout
               </span>
             </button>
-            <button className="flex items-center justify-between p-4 hover:bg-red-50 text-red-600 dark:hover:bg-red-500/10 rounded-2xl transition-colors group mt-2 border border-transparent hover:border-red-100 dark:hover:border-red-500/20 w-full text-left">
+            <button
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="flex items-center justify-between p-4 hover:bg-red-50 text-red-600 dark:hover:bg-red-500/10 rounded-2xl transition-colors group mt-2 border border-transparent hover:border-red-100 dark:hover:border-red-500/20 w-full text-left"
+            >
               <span className="font-semibold flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center group-hover:bg-red-100 dark:group-hover:bg-red-500/20 transition-colors">
                   <User className="w-5 h-5" />
@@ -193,7 +253,10 @@ export default function ProfilePage() {
                 </motion.div>
               </Link>
 
-              <Link href="/report">
+              <button
+                onClick={() => setIsReportIssueOpen(true)}
+                className="text-left"
+              >
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -217,7 +280,7 @@ export default function ProfilePage() {
                     </p>
                   </div>
                 </motion.div>
-              </Link>
+              </button>
             </div>
           </div>
 
@@ -331,10 +394,118 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
       <NotificationSidebar
         isOpen={isNotificationSidebarOpen}
         onClose={() => setIsNotificationSidebarOpen(false)}
       />
+      <ReportIssueSidebar
+        isOpen={isReportIssueOpen}
+        onClose={() => setIsReportIssueOpen(false)}
+      />
+
+      {/* Logout Modal */}
+      <AnimatePresence>
+        {isLogoutModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsLogoutModalOpen(false)}
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 max-w-sm w-full relative z-10 shadow-2xl text-center"
+            >
+              <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <LogOut className="w-8 h-8" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">
+                Sign Out?
+              </h2>
+              <p className="text-slate-500 mb-6">
+                Are you sure you want to log out of your account?
+              </p>
+              <div className="flex gap-3">
+                <button
+                  disabled={actionLoading}
+                  onClick={() => setIsLogoutModalOpen(false)}
+                  className="flex-1 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  disabled={actionLoading}
+                  onClick={handleLogout}
+                  className="flex-1 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition-colors flex justify-center items-center"
+                >
+                  {actionLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    "Logout"
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Account Modal */}
+      <AnimatePresence>
+        {isDeleteModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsDeleteModalOpen(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 max-w-sm w-full relative z-10 shadow-2xl text-center"
+            >
+              <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <User className="w-8 h-8" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">
+                Delete Account?
+              </h2>
+              <p className="text-slate-500 mb-6">
+                This action cannot be undone. All your data will be permanently
+                removed.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  disabled={actionLoading}
+                  onClick={() => setIsDeleteModalOpen(false)}
+                  className="flex-1 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  disabled={actionLoading}
+                  onClick={handleDeleteAccount}
+                  className="flex-1 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition-colors flex justify-center items-center"
+                >
+                  {actionLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    "Delete"
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

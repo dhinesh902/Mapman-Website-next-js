@@ -21,7 +21,7 @@ apiService.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 export const getHomeData = async () => {
@@ -46,7 +46,9 @@ export const getHomeCategories = async () => {
 
 export const addNewCategoryApi = async (categoryName: string) => {
   try {
-    const response = await apiService.post("/shop/addNewCategory", { categoryName });
+    const response = await apiService.post("/shop/addNewCategory", {
+      categoryName,
+    });
     return response.data;
   } catch (error) {
     console.error("Error adding category:", error);
@@ -56,7 +58,9 @@ export const addNewCategoryApi = async (categoryName: string) => {
 
 export const deleteCategoryApi = async (categoryName: string) => {
   try {
-    const response = await apiService.post("/shop/deleteCategory", { categoryName });
+    const response = await apiService.post("/shop/deleteCategory", {
+      categoryName,
+    });
     return response.data;
   } catch (error) {
     console.error("Error deleting category:", error);
@@ -65,7 +69,9 @@ export const deleteCategoryApi = async (categoryName: string) => {
 };
 export const searchShops = async (input: string) => {
   try {
-    const response = await apiService.get(`/shop/nonauthendicateSearch?input=${input}`);
+    const response = await apiService.get(
+      `/shop/nonauthendicateSearch?input=${input}`,
+    );
     return response.data;
   } catch (error) {
     console.error("Error searching shops:", error);
@@ -104,7 +110,9 @@ export const fetchShopApi = async () => {
 
 export const getShopById = async (shopId: string | number) => {
   try {
-    const response = await apiService.post("/shop/getShopById", { shopId: Number(shopId) });
+    const response = await apiService.post("/shop/getShopById", {
+      shopId: Number(shopId),
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching shop details:", error);
@@ -126,9 +134,13 @@ export const shopRegister = async (formData: FormData) => {
   }
 };
 
-export const sendOtpApi = async (phoneNumber: string): Promise<ResponseModel> => {
+export const sendOtpApi = async (
+  phoneNumber: string,
+): Promise<ResponseModel> => {
   try {
-    const response = await apiService.post("/shop/auth/sendOtp", { phoneNumber });
+    const response = await apiService.post("/shop/auth/sendOtp", {
+      phoneNumber,
+    });
     return response.data;
   } catch (error) {
     console.error("Error sending OTP:", error);
@@ -136,9 +148,15 @@ export const sendOtpApi = async (phoneNumber: string): Promise<ResponseModel> =>
   }
 };
 
-export const verifyOtpApi = async (phoneNumber: string, otp: number): Promise<VerifyOtpResponseModel> => {
+export const verifyOtpApi = async (
+  phoneNumber: string,
+  otp: number,
+): Promise<VerifyOtpResponseModel> => {
   try {
-    const response = await apiService.post("/shop/auth/verifyOtp", { phoneNumber, otp });
+    const response = await apiService.post("/shop/auth/verifyOtp", {
+      phoneNumber,
+      otp,
+    });
     return response.data;
   } catch (error) {
     console.error("Error verifying OTP:", error);
@@ -148,7 +166,9 @@ export const verifyOtpApi = async (phoneNumber: string, otp: number): Promise<Ve
 
 export const fetchNotificationsApi = async (page: number = 1) => {
   try {
-    const response = await apiService.get(`/shop/fetchNotifications?page=${page}`);
+    const response = await apiService.get(
+      `/shop/fetchNotifications?page=${page}`,
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching notifications:", error);
@@ -166,12 +186,87 @@ export const fetchNotificationPreferenceApi = async () => {
   }
 };
 
-export const updateNotificationPreferenceApi = async (data: { enableNotifications: number, newVideo: number, newShop: number }) => {
+export const updateNotificationPreferenceApi = async (data: {
+  enableNotifications: number;
+  newVideo: number;
+  newShop: number;
+}) => {
   try {
-    const response = await apiService.post("/shop/notificationPreference", data);
+    const response = await apiService.post(
+      "/shop/notificationPreference",
+      data,
+    );
     return response.data;
   } catch (error) {
     console.error("Error updating notification preferences:", error);
+    throw error;
+  }
+};
+
+export const reportIssueApi = async (formData: FormData) => {
+  try {
+    const response = await apiService.post("/shop/reportIssue", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error reporting issue:", error);
+    throw error;
+  }
+};
+
+export const getShopAnalyticsApi = async () => {
+  try {
+    const response = await apiService.get("/shop/analytics");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching shop analytics:", error);
+    throw error;
+  }
+};
+
+export const logoutApi = async () => {
+  try {
+    const response = await apiService.post("/shop/auth/logout");
+    return response.data;
+  } catch (error) {
+    console.error("Error logging out:", error);
+    throw error;
+  }
+};
+
+export const deleteAccountApi = async () => {
+  try {
+    const response = await apiService.post("/shop/deleteAccount");
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    throw error;
+  }
+};
+
+export const getProfileApi = async () => {
+  try {
+    const response = await apiService.get("/shop/getProfile");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    throw error;
+  }
+};
+
+export const updateProfileApi = async (formData: FormData) => {
+  try {
+    const response = await apiService.post("/shop/updateProfile", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating profile:", error);
     throw error;
   }
 };

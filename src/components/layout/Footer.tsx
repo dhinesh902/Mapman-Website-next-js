@@ -35,7 +35,11 @@ export default function Footer() {
               className="flex items-center gap-2 mb-6 group inline-flex"
             >
               <div className="bg-white dark:bg-slate-900 p-1.5 rounded-xl shadow-lg shadow-primary/25 border border-slate-100 dark:border-slate-800 group-hover:scale-110 transition-transform flex items-center justify-center">
-                <img src="/app-logo.png" alt="Mapman Logo" className="w-8 h-8 object-contain" />
+                <img
+                  src="/app-logo.png"
+                  alt="Mapman Logo"
+                  className="w-8 h-8 object-contain"
+                />
               </div>
               <span className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 MAP
@@ -49,13 +53,13 @@ export default function Footer() {
               instantly using our interactive map platform. Your neighborhood,
               simplified.
             </p>
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <SocialIcon Icon={MessageCircle} href="#" />
               <SocialIcon Icon={Camera} href="#" />
               <SocialIcon Icon={Briefcase} href="#" />
               <SocialIcon Icon={Video} href="#" />
               <SocialIcon Icon={Send} href="#" />
-            </div>
+            </div> */}
           </div>
 
           {/* Quick Links */}
@@ -65,22 +69,24 @@ export default function Footer() {
             </h3>
             <ul className="space-y-4">
               <FooterLink href="/">Home</FooterLink>
-              <FooterLink href="/map">Interactive Map</FooterLink>
-              <FooterLink href="/videos">Discover Videos</FooterLink>
-              <FooterLink href="/contact">Contact Support</FooterLink>
+              <FooterLink href="/map">Map</FooterLink>
+              <FooterLink href="/videos">Videos</FooterLink>
+              <FooterLink href="/profile">Profile</FooterLink>
+              <FooterLink href="/about">About Us</FooterLink>
+              <FooterLink href="/contact">Contact Us</FooterLink>
             </ul>
           </div>
 
-          {/* Company & Support */}
+          {/* Policies */}
           <div className="lg:col-span-2">
             <h3 className="font-extrabold text-lg mb-6 text-slate-900 dark:text-white uppercase tracking-wider text-sm">
-              Company
+              Policies
             </h3>
             <ul className="space-y-4 mb-8">
-              <FooterLink href="/about">About Us</FooterLink>
-              <FooterLink href="#">Our Services</FooterLink>
-              <FooterLink href="#">Careers</FooterLink>
-              <FooterLink href="#">Blog</FooterLink>
+              <FooterLink href="/privacy-policy">Privacy Policy</FooterLink>
+              <FooterLink href="/terms-and-conditions">
+                Terms and Conditions
+              </FooterLink>
             </ul>
           </div>
 
@@ -207,7 +213,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-slate-200 dark:border-slate-800/60 pt-8 flex flex-col md:flex-row items-center justify-between text-slate-500 font-medium text-sm">
+        <div className="border-t border-slate-200 dark:border-slate-800/60 pt-8 flex flex-col items-center justify-center text-center text-slate-500 font-medium text-sm">
           <p>
             © 2026{" "}
             <span className="font-bold text-slate-900 dark:text-white">
@@ -215,20 +221,6 @@ export default function Footer() {
             </span>
             . All Rights Reserved.
           </p>
-          <div className="flex gap-8 mt-4 md:mt-0">
-            <Link
-              href="/privacy-policy"
-              className="hover:text-primary transition-colors"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms-and-conditions"
-              className="hover:text-primary transition-colors"
-            >
-              Terms and Conditions
-            </Link>
-          </div>
         </div>
       </div>
     </footer>
