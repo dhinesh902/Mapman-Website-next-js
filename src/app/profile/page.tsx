@@ -17,7 +17,11 @@ import { useState, useEffect } from "react";
 import NotificationSidebar from "@/components/profile/NotificationSidebar";
 import ReportIssueSidebar from "@/components/profile/ReportIssueSidebar";
 import { Eye, Loader2 } from "lucide-react";
-import { logoutApi, deleteAccountApi, getProfileApi } from "@/services/apiService";
+import {
+  logoutApi,
+  deleteAccountApi,
+  getProfileApi,
+} from "@/services/apiService";
 
 export default function ProfilePage() {
   const stats = [
@@ -111,7 +115,15 @@ export default function ProfilePage() {
             <div className="absolute top-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-[60px]" />
             <div className="relative w-32 h-32 rounded-full border-4 border-white/10 shadow-2xl mb-5 flex items-center justify-center bg-slate-800 overflow-hidden group">
               {profile?.profilePic ? (
-                <img src={profile.profilePic.startsWith('http') ? profile.profilePic : `https://api.mapman.in${profile.profilePic}`} alt="Profile" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <img
+                  src={
+                    profile.profilePic.startsWith("http")
+                      ? profile.profilePic
+                      : `https://api.mapman.in${profile.profilePic}`
+                  }
+                  alt="Profile"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
               ) : (
                 <User className="w-16 h-16 text-slate-400 group-hover:scale-110 transition-transform duration-500" />
               )}
@@ -303,7 +315,12 @@ export default function ProfilePage() {
                 <p className="text-white/80 text-sm mb-6 max-w-[200px]">
                   Our support team is available 24/7 to help you out.
                 </p>
-                <button className="bg-white text-primary px-5 py-2.5 rounded-xl font-bold text-sm shadow-md hover:scale-105 transition-transform">
+                <button
+                  className="bg-white text-primary px-5 py-2.5 rounded-xl font-bold text-sm shadow-md hover:scale-105 transition-transform cursor-pointer"
+                  onClick={() => {
+                    window.location.href = "tel:+919342376760";
+                  }}
+                >
                   Contact Support
                 </button>
               </motion.div>

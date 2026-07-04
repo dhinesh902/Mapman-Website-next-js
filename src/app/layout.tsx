@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import QueryProvider from "@/providers/query-provider";
 import { AuthProvider } from "@/providers/auth-provider";
 import FloatingContact from "@/components/layout/FloatingContact";
+import ScrollToTop from "@/components/layout/ScrollToTop";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className="antialiased min-h-screen flex flex-col font-sans">
         <QueryProvider>
           <AuthProvider>
+            <ScrollToTop />
             <Header />
             <main className="flex-1 pt-[80px]">
               {children}
