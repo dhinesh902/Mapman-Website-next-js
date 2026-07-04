@@ -31,7 +31,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-950 pb-24 font-sans selection:bg-primary/20">
+    <div className="flex flex-col bg-slate-50 dark:bg-slate-950 pb-8 font-sans selection:bg-primary/20">
       {/* Stylish Top Banner */}
       <section className="relative w-full h-[55vh] min-h-[450px] flex items-center justify-center overflow-hidden pt-20 group">
         <div className="absolute inset-0 bg-slate-900/60 z-10" />
@@ -77,7 +77,7 @@ export default function AboutPage() {
       {/* Modern Hero Section */}
       <section className="relative pt-20 pb-20 lg:pt-32 lg:pb-32 overflow-hidden px-4 md:px-8 max-w-7xl mx-auto w-full">
         {/* Decorative Gradients */}
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[40rem] h-[40rem] bg-primary/10 rounded-full blur-3xl -z-10 animate-pulse" />
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[40rem] h-[40rem] bg-primary/10 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[30rem] h-[30rem] bg-accent/10 rounded-full blur-3xl -z-10" />
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">

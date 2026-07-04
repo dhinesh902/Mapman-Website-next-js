@@ -170,11 +170,10 @@ export default function ShopDetailsPage({
                   {shop.category || "General"}
                 </span>
                 <span
-                  className={`flex items-center gap-1.5 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-lg shadow-lg backdrop-blur-md border ${
-                    isOpen
+                  className={`flex items-center gap-1.5 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-lg shadow-lg backdrop-blur-md border ${isOpen
                       ? "bg-emerald-500/80 text-white border-emerald-400"
                       : "bg-red-500/80 text-white border-red-400"
-                  }`}
+                    }`}
                 >
                   <Clock className="w-3 h-3" />
                   {isOpen ? "Open Now" : "Closed"}

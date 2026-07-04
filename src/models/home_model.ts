@@ -87,6 +87,22 @@ export interface NotificationData {
   updatedAt?: string;
 }
 
+export interface NotificationPreferenceModel {
+  status?: number;
+  data?: NotificationPreferenceData;
+}
+
+export interface NotificationPreferenceData {
+  id?: number;
+  userId?: number;
+  enableNotifications?: number;
+  savedVideo?: number;
+  newVideo?: number;
+  newShop?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 // -----------------------
 
 export interface ShopDetailModel {

@@ -59,7 +59,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="flex flex-col pb-24">
+    <div className="flex flex-col pb-8">
       {/* Stylish Top Banner */}
       <section className="relative w-full h-[55vh] min-h-[450px] flex items-center justify-center overflow-hidden pt-20 group">
         <div className="absolute inset-0 bg-slate-900/65 z-10" />

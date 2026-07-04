@@ -70,12 +70,14 @@ export default function FloatingContact() {
       {/* Main Contact Button */}
       <Link href="/contact" className="relative z-10 block">
         <motion.div
+          animate={{ y: [0, -10, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative bg-slate-900 dark:bg-white text-white dark:text-slate-900 p-4 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.2)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.15)] flex items-center justify-center cursor-pointer group border border-slate-800 dark:border-slate-100"
+          className="relative bg-primary text-white p-4 rounded-full shadow-[0_8px_30px_rgba(var(--primary),0.4)] flex items-center justify-center cursor-pointer group"
         >
           {/* Animated ping effect */}
-          <span className="absolute inset-0 rounded-full bg-primary opacity-20 animate-ping group-hover:opacity-40 transition-opacity" />
+          <span className="absolute inset-0 rounded-full bg-white/30 opacity-20 animate-ping group-hover:opacity-40 transition-opacity" />
           
           <Headset className="w-7 h-7 relative z-10 group-hover:scale-110 transition-transform duration-300" />
         </motion.div>

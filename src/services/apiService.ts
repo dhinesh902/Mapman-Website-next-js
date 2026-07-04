@@ -155,3 +155,23 @@ export const fetchNotificationsApi = async (page: number = 1) => {
     throw error;
   }
 };
+
+export const fetchNotificationPreferenceApi = async () => {
+  try {
+    const response = await apiService.get("/shop/fetchNotificationPreference");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching notification preferences:", error);
+    throw error;
+  }
+};
+
+export const updateNotificationPreferenceApi = async (data: { enableNotifications: number, newVideo: number, newShop: number }) => {
+  try {
+    const response = await apiService.post("/shop/notificationPreference", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating notification preferences:", error);
+    throw error;
+  }
+};

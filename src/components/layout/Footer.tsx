@@ -34,8 +34,8 @@ export default function Footer() {
               href="/"
               className="flex items-center gap-2 mb-6 group inline-flex"
             >
-              <div className="bg-gradient-to-br from-primary to-accent p-2 rounded-xl shadow-lg shadow-primary/25 group-hover:scale-110 transition-transform">
-                <MapPin className="text-white w-7 h-7" />
+              <div className="bg-white dark:bg-slate-900 p-1.5 rounded-xl shadow-lg shadow-primary/25 border border-slate-100 dark:border-slate-800 group-hover:scale-110 transition-transform flex items-center justify-center">
+                <img src="/app-logo.png" alt="Mapman Logo" className="w-8 h-8 object-contain" />
               </div>
               <span className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 MAP
@@ -161,26 +161,23 @@ export default function Footer() {
             <h3 className="font-extrabold text-lg mb-6 text-slate-900 dark:text-white uppercase tracking-wider text-sm">
               Get The App
             </h3>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3.5">
               <a
                 href="https://apps.apple.com/in/app/mapman-app/id6762550173"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-3 bg-slate-900 dark:bg-black text-white px-5 py-3 rounded-xl hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 border border-slate-800 relative overflow-hidden"
+                className="group flex items-center gap-3.5 bg-black hover:bg-slate-900 dark:bg-slate-900 dark:hover:bg-slate-800 text-white px-5 py-3 rounded-xl shadow-md shadow-black/10 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 border border-slate-800"
               >
-                {/* Subtle hover gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
                 <img
-                  src="https://cdn-icons-png.flaticon.com/128/179/179309.png"
+                  src="https://cdn-icons-png.flaticon.com/128/731/731985.png"
                   alt="App Store"
-                  className="w-7 h-7 object-contain invert relative z-10"
+                  className="w-7 h-7 object-contain invert brightness-200"
                 />
-                <div className="flex flex-col text-left relative z-10">
-                  <span className="text-[10px] font-medium leading-none text-slate-400 mb-1">
+                <div className="flex flex-col text-left">
+                  <span className="text-[10px] font-medium leading-[1.2] text-slate-300">
                     Download on the
                   </span>
-                  <span className="text-sm font-semibold leading-none font-sans">
+                  <span className="text-[13px] font-semibold leading-[1.2] tracking-tight">
                     App Store
                   </span>
                 </div>
@@ -189,21 +186,18 @@ export default function Footer() {
                 href="https://play.google.com/store/apps/details?id=com.mapman.mapman"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-3 bg-slate-900 dark:bg-black text-white px-5 py-3 rounded-xl hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/20 transition-all duration-300 border border-slate-800 relative overflow-hidden"
+                className="group flex items-center gap-3.5 bg-black hover:bg-slate-900 dark:bg-slate-900 dark:hover:bg-slate-800 text-white px-5 py-3 rounded-xl shadow-md shadow-black/10 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/20 transition-all duration-300 border border-slate-800"
               >
-                {/* Subtle hover gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
                 <img
-                  src="https://cdn-icons-png.flaticon.com/128/6124/6124997.png"
+                  src="https://cdn-icons-png.flaticon.com/128/300/300218.png"
                   alt="Google Play"
-                  className="w-7 h-7 object-contain relative z-10"
+                  className="w-7 h-7 object-contain"
                 />
-                <div className="flex flex-col text-left relative z-10">
-                  <span className="text-[10px] font-medium leading-none text-slate-400 mb-1 uppercase tracking-wider">
+                <div className="flex flex-col text-left">
+                  <span className="text-[10px] font-medium leading-[1.2] text-slate-300 uppercase tracking-wide">
                     Get it on
                   </span>
-                  <span className="text-sm font-semibold leading-none font-sans">
+                  <span className="text-[13px] font-semibold leading-[1.2] tracking-tight">
                     Google Play
                   </span>
                 </div>
@@ -222,14 +216,17 @@ export default function Footer() {
             . All Rights Reserved.
           </p>
           <div className="flex gap-8 mt-4 md:mt-0">
-            <Link href="/privacy-policy" className="hover:text-primary transition-colors">
+            <Link
+              href="/privacy-policy"
+              className="hover:text-primary transition-colors"
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms-and-conditions" className="hover:text-primary transition-colors">
+            <Link
+              href="/terms-and-conditions"
+              className="hover:text-primary transition-colors"
+            >
               Terms and Conditions
-            </Link>
-            <Link href="#" className="hover:text-primary transition-colors">
-              Cookies
             </Link>
           </div>
         </div>

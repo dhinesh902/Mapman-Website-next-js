@@ -19,7 +19,7 @@ export default function SavedPage() {
   ];
 
   return (
-    <div className="container mx-auto px-4 md:px-6 py-8 pb-24">
+    <div className="container mx-auto px-4 md:px-6 py-8 pb-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
           <h1 className="text-3xl font-bold font-heading mb-2">Saved Items</h1>

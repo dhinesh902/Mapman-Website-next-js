@@ -53,7 +53,7 @@ export default function ShopListPage() {
   }, []);
 
   return (
-    <div className="w-full px-2 lg:px-4 py-8 pb-24 max-w-[1920px] mx-auto">
+    <div className="w-full px-2 lg:px-4 py-8 pb-8 max-w-[1920px] mx-auto">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
           <h1 className="text-3xl font-bold font-heading mb-2">

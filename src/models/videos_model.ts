@@ -15,22 +15,50 @@ export interface CategoryVideoData {
 }
 
 export interface MyvideosModel {
-    status?: number;
-    data?:   MyVideosData[];
+  status?: number;
+  data?: MyVideosData[];
 }
 
 export interface MyVideosData {
-    id?:          number;
-    profileId?:   number;
-    shopId?:      number;
-    video?:       string;
-    thumbnail?:   string;
-    videoTitle?:  string;
-    shopName?:    string;
-    category?:    string;
-    description?: string;
-    status?:      string;
-    createdAt?:   string;
-    updatedAt?:   string;
-    views?:       number;
+  id?: number;
+  profileId?: number;
+  shopId?: number;
+  video?: string;
+  thumbnail?: string;
+  videoTitle?: string;
+  shopName?: string;
+  category?: string;
+  description?: string;
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  views?: number;
+}
+
+// ------------------ Shop analytics model ------------------
+
+export interface ShopAnalyticsModel {
+  status?: number;
+  data?: ShopAnalyticsData;
+}
+
+export interface ShopAnalyticsData {
+  totalVideos?: TotalVideo[];
+  totalViews?: number;
+}
+
+export interface TotalVideo {
+  id?: number;
+  profileId?: number;
+  shopId?: number;
+  video?: string;
+  thumbnail?: string;
+  videoTitle?: string;
+  shopName?: string;
+  category?: string;
+  description?: string;
+  status?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  viewCount?: number;
 }

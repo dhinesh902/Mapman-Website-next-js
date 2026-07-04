@@ -41,19 +41,22 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-500 ease-out ${
-        isScrolled 
-          ? "bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-b border-slate-200/50 dark:border-slate-800/50 py-3" 
+        isScrolled
+          ? "bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-b border-slate-200/50 dark:border-slate-800/50 py-3"
           : "bg-transparent py-5 lg:py-6"
       }`}
     >
       <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="bg-gradient-to-br from-primary to-accent p-2.5 rounded-[14px] group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/30 transition-all duration-300">
-            <MapPin className="text-white w-6 h-6" />
+          <div className="bg-white dark:bg-slate-900 p-1.5 rounded-[14px] shadow-lg shadow-primary/30 border border-slate-100 dark:border-slate-800 group-hover:scale-110 transition-transform flex items-center justify-center">
+            <img src="/app-logo.png" alt="Mapman Logo" className="w-8 h-8 object-contain" />
           </div>
           <span className="text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white font-heading">
-            MAP<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">MAN</span>
+            MAP
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              MAN
+            </span>
           </span>
         </Link>
 
@@ -66,8 +69,8 @@ export default function Header() {
                 key={link.name}
                 href={link.path}
                 className={`relative px-5 py-2 text-sm font-bold transition-all duration-300 rounded-full ${
-                  isActive 
-                    ? "text-primary bg-primary/10 shadow-inner" 
+                  isActive
+                    ? "text-primary bg-primary/10 shadow-inner"
                     : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800"
                 }`}
               >
@@ -89,15 +92,21 @@ export default function Header() {
           <button className="w-11 h-11 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary transition-colors group">
             <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />
           </button>
-          
-          <button onClick={() => handleAuthClick('/notifications')} className="relative w-11 h-11 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary transition-colors group">
+
+          <button
+            onClick={() => handleAuthClick("/notifications")}
+            className="relative w-11 h-11 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary transition-colors group"
+          >
             <Bell className="w-5 h-5 group-hover:scale-110 transition-transform" />
             <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-950 animate-pulse"></span>
           </button>
-          
+
           <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
-          
-          <button onClick={() => handleAuthClick('/profile')} className="ml-2 group">
+
+          <button
+            onClick={() => handleAuthClick("/profile")}
+            className="ml-2 group"
+          >
             <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-primary to-accent p-[2px] flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-primary/20">
               <div className="w-full h-full bg-white dark:bg-slate-900 rounded-full flex items-center justify-center group-hover:bg-primary/5 transition-colors">
                 <User className="w-5 h-5 text-slate-700 dark:text-slate-200 group-hover:text-primary transition-colors" />
@@ -111,7 +120,11 @@ export default function Header() {
           className="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 active:scale-95 transition-transform"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
         </button>
       </div>
 
@@ -140,14 +153,14 @@ export default function Header() {
                   {link.name}
                 </Link>
               ))}
-              
+
               <div className="h-px w-full bg-slate-200 dark:bg-slate-800 my-4" />
-              
+
               <div className="flex items-center justify-between px-2">
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    handleAuthClick('/profile');
+                    handleAuthClick("/profile");
                   }}
                   className="flex items-center gap-4 text-slate-700 dark:text-slate-200 group"
                 >
@@ -162,10 +175,10 @@ export default function Header() {
                   <button className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300">
                     <Search className="w-6 h-6" />
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
                       setIsMobileMenuOpen(false);
-                      handleAuthClick('/notifications');
+                      handleAuthClick("/notifications");
                     }}
                     className="relative w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300"
                   >

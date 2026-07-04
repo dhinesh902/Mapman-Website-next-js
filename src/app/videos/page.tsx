@@ -100,7 +100,7 @@ export default function VideosPage() {
     url.startsWith("http") ? url : `https://api.mapman.in${url}`;
 
   return (
-    <div className="w-full px-2 md:px-4 lg:px-8 py-6 pb-24 relative overflow-hidden">
+    <div className="w-full px-2 md:px-4 lg:px-8 py-6 pb-8 relative overflow-hidden">
       {/* Header & Tabs */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
