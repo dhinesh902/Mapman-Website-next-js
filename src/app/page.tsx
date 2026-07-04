@@ -423,31 +423,43 @@ export default function Home() {
             {categoryBanners.map((banner, idx) => (
               <motion.div
                 key={banner.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="relative bg-black rounded-3xl overflow-hidden shadow-lg group h-[250px] md:h-[280px] lg:h-[320px] flex flex-col justify-end p-5 md:p-8"
+                transition={{ delay: idx * 0.1, duration: 0.6 }}
+                className="relative bg-slate-900 rounded-[2rem] overflow-hidden group h-[280px] md:h-[320px] lg:h-[360px] flex flex-col justify-between p-6 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 border border-slate-200 dark:border-slate-800"
               >
                 <Image
                   src={getImageUrl(banner.backgroundImage)}
                   alt={banner.title}
                   fill
-                  className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                  className="object-cover opacity-60 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90" />
+                
+                {/* Gradient Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 pointer-events-none" />
+                <div className="absolute inset-0 bg-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none mix-blend-overlay" />
 
-                <div className="relative z-10 text-white transform transition-transform duration-500 group-hover:-translate-y-2">
-                  <span className="inline-block px-2.5 py-1 bg-primary/80 backdrop-blur-sm rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider mb-2 shadow-lg">
+                {/* Top Section */}
+                <div className="relative z-10 flex justify-end">
+                  <span className="px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white text-xs font-extrabold uppercase tracking-widest shadow-lg group-hover:bg-primary/90 group-hover:border-primary transition-colors duration-300">
                     {banner.category}
                   </span>
-                  <h3 className="text-xl md:text-2xl font-bold mb-2 capitalize leading-tight">
+                </div>
+
+                {/* Bottom Section */}
+                <div className="relative z-10 text-white transform transition-all duration-500 group-hover:-translate-y-2">
+                  <h3 className="text-2xl md:text-3xl font-black mb-4 capitalize leading-tight drop-shadow-md">
                     {banner.title}
                   </h3>
-                  <button className="flex items-center gap-1.5 bg-white/20 hover:bg-white text-white hover:text-slate-900 backdrop-blur-md px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shadow-lg border border-white/10 w-max">
-                    {banner.contact || "Explore Now"}
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button className="flex items-center gap-2 bg-primary hover:bg-white text-white hover:text-slate-900 px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg shadow-primary/30 active:scale-95 group/btn">
+                      {banner.contact || "Explore Now"}
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
+                    {/* Decorative glowing dot */}
+                    <div className="w-2 h-2 rounded-full bg-white/50 group-hover:bg-white group-hover:animate-ping transition-colors" />
+                  </div>
                 </div>
               </motion.div>
             ))}

@@ -12,11 +12,12 @@ import {
   List as ListIcon,
   Navigation,
   Edit,
+  Trash2,
   Loader2,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { fetchShopApi } from "@/services/apiService";
+import { fetchShopApi, deleteShopApi } from "@/services/apiService";
 import { Shop } from "@/models/home_model";
 
 const getImageUrl = (url: string | null) => {
@@ -51,6 +52,19 @@ export default function ShopListPage() {
     };
     fetchShops();
   }, []);
+
+  const handleDeleteShop = async (shopId: number | undefined) => {
+    if (!shopId) return;
+    if (confirm("Are you sure you want to delete this shop?")) {
+      try {
+        await deleteShopApi(shopId);
+        setShops((prev) => prev.filter((s) => s.id !== shopId));
+      } catch (err) {
+        console.error("Error deleting shop:", err);
+        alert("Failed to delete shop.");
+      }
+    }
+  };
 
   return (
     <div className="w-full px-2 lg:px-4 py-8 pb-8 max-w-[1920px] mx-auto">
@@ -176,19 +190,25 @@ export default function ShopListPage() {
                         {shop.address || "No address available"}
                       </span>
                     </div>
-                    <div className="flex gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+                    <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
                       <Link
                         href={`/shop/${shop.id}`}
-                        className="flex-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 text-slate-700 dark:text-slate-200"
+                        className="flex-1 min-w-[30%] bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 text-slate-700 dark:text-slate-200"
                       >
                         <Navigation className="w-4 h-4" /> View
                       </Link>
                       <Link
                         href={`/edit-shop?id=${shop.id}`}
-                        className="flex-1 bg-primary/10 text-primary hover:bg-primary/20 transition-colors py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5"
+                        className="flex-1 min-w-[30%] bg-primary/10 text-primary hover:bg-primary/20 transition-colors py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5"
                       >
                         <Edit className="w-4 h-4" /> Edit
                       </Link>
+                      <button
+                        onClick={() => handleDeleteShop(shop.id)}
+                        className="flex-1 min-w-[30%] bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 transition-colors py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5"
+                      >
+                        <Trash2 className="w-4 h-4" /> Delete
+                      </button>
                     </div>
                   </div>
                 </motion.div>
@@ -253,6 +273,12 @@ export default function ShopListPage() {
                     >
                       <Edit className="w-4 h-4" /> Edit
                     </Link>
+                    <button
+                      onClick={() => handleDeleteShop(shop.id)}
+                      className="flex-1 md:w-28 bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 transition-colors py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5"
+                    >
+                      <Trash2 className="w-4 h-4" /> Delete
+                    </button>
                   </div>
                 </motion.div>
               ))}

@@ -14,6 +14,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { contactUsApi } from "@/services/apiService";
 
 const faqs = [
   {
@@ -50,13 +51,23 @@ export default function ContactPage() {
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     setSubmitStatus("idle");
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await contactUsApi({
+        name: data.name || data.fullName, // Adjust based on form fields if necessary, assuming name
+        email: data.email,
+        subject: data.subject || "No Subject",
+        message: data.message,
+      });
       setSubmitStatus("success");
       reset();
       setTimeout(() => setSubmitStatus("idle"), 5000);
-    }, 1500);
+    } catch (error) {
+      console.error(error);
+      setSubmitStatus("error");
+      setTimeout(() => setSubmitStatus("idle"), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

@@ -147,6 +147,84 @@ export const saveShopApi = async (shopId: number, status: string) => {
   }
 };
 
+export const deleteShopApi = async (shopId: number) => {
+  try {
+    const response = await apiService.get(`/shop/deleteShop?shopId=${shopId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting shop:", error);
+    throw error;
+  }
+};
+
+export const videoRegisterApi = async (formData: FormData) => {
+  try {
+    const response = await apiService.post("/shop/videoRegister", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error registering video:", error);
+    throw error;
+  }
+};
+
+export const updateVideoDetailsApi = async (body: any) => {
+  try {
+    const response = await apiService.post("/shop/updateVideoDetails", body);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating video details:", error);
+    throw error;
+  }
+};
+
+export const replaceVideoApi = async (formData: FormData) => {
+  try {
+    const response = await apiService.post("/shop/replaceVideo", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error replacing video:", error);
+    throw error;
+  }
+};
+
+export const deleteVideoApi = async (videoId: number) => {
+  try {
+    const response = await apiService.post("/shop/deleteVideo", { videoId });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting video:", error);
+    throw error;
+  }
+};
+
+export const getCategoryVideosPaginated = async (category: string, page: number = 1) => {
+  try {
+    const response = await apiService.get(`/shop/allVideos?category=${category}&page=${page}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching category videos:", error);
+    throw error;
+  }
+};
+
+export const contactUsApi = async (body: any) => {
+  try {
+    const response = await apiService.post("/shop/contactUs", body);
+    return response.data;
+  } catch (error) {
+    console.error("Error submitting contact form:", error);
+    throw error;
+  }
+};
+
 export const fetchShopApi = async () => {
   try {
     const response = await apiService.get("/shop/fetchShop");
