@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -37,6 +38,7 @@ import { CategoryVideoData, MyVideosData } from "@/models/videos_model";
 import { Shop } from "@/models/home_model";
 
 export default function VideosPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("all");
   const [videos, setVideos] = useState<CategoryVideoData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -131,6 +133,12 @@ export default function VideosPage() {
     } else {
       setActiveTab("my");
     }
+  };
+
+  const handleMyVideoClick = (videoId: number | undefined) => {
+    if (!videoId) return;
+    sessionStorage.setItem("videoPlaylist", JSON.stringify(myVideos));
+    router.push(`/video-player?videoId=${videoId}`);
   };
 
   const openUploadSidebar = (video?: MyVideosData) => {
@@ -364,7 +372,8 @@ export default function VideosPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="group relative bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800/60 hover:border-primary/40 shadow-md hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-2 z-10"
+                onClick={() => handleMyVideoClick(video.id)}
+                className="group relative bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800/60 hover:border-primary/40 shadow-md hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-2 z-10 cursor-pointer"
               >
                 <div className="relative aspect-[4/3] overflow-hidden cursor-pointer bg-slate-100 dark:bg-slate-800 m-2 rounded-[1.5rem]">
                   {/* Status Badge */}
@@ -425,13 +434,13 @@ export default function VideosPage() {
                   
                   <div className="flex items-center gap-3 mt-auto pt-4 border-t border-slate-100 dark:border-slate-800/60">
                     <button 
-                      onClick={() => openUploadSidebar(video)}
+                      onClick={(e) => { e.stopPropagation(); openUploadSidebar(video); }}
                       className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 text-sm font-bold border border-slate-200/50 dark:border-slate-700 hover:border-transparent group/edit"
                     >
                       <Edit className="w-4 h-4 group-hover/edit:rotate-12 transition-transform" /> Edit
                     </button>
                     <button 
-                      onClick={() => handleDeleteVideo(video.id)}
+                      onClick={(e) => { e.stopPropagation(); handleDeleteVideo(video.id); }}
                       className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-red-500 hover:bg-red-500 hover:text-white hover:shadow-lg hover:shadow-red-500/25 transition-all duration-300 text-sm font-bold border border-slate-200/50 dark:border-slate-700 hover:border-transparent group/del"
                     >
                       <Trash2 className="w-4 h-4 group-hover/del:scale-110 transition-transform" /> Delete

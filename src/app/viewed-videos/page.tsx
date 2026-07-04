@@ -11,10 +11,12 @@ import {
   Search,
   ArrowLeft,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function ViewedVideosPage() {
+  const router = useRouter();
   const [videos, setVideos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -54,6 +56,12 @@ export default function ViewedVideosPage() {
   useEffect(() => {
     fetchVideos(1, true);
   }, []);
+
+  const handleVideoClick = (videoId: number | undefined) => {
+    if (!videoId) return;
+    sessionStorage.setItem("videoPlaylist", JSON.stringify(videos));
+    router.push(`/video-player?videoId=${videoId}`);
+  };
 
   const handleLoadMore = () => {
     if (!loadingMore && hasMore) {
@@ -123,8 +131,10 @@ export default function ViewedVideosPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
+                  
                   key={`${video.id}-${index}`}
-                  className="group relative rounded-[1.5rem] overflow-hidden border border-slate-200/50 dark:border-slate-700/50 shadow-sm hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300"
+                  onClick={() => handleVideoClick(video.id)}
+                  className="group relative rounded-[1.5rem] overflow-hidden border border-slate-200/50 dark:border-slate-700/50 shadow-sm hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                 >
                   <div className="relative aspect-[10/16] bg-slate-900 overflow-hidden rounded-[1.5rem]">
                     <img

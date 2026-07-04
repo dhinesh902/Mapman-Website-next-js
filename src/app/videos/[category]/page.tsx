@@ -68,6 +68,12 @@ export default function CategoryVideosPage() {
     fetchVideos();
   }, [categoryName, page]);
 
+  const handleVideoClick = (videoId: number | undefined) => {
+    if (!videoId) return;
+    sessionStorage.setItem("videoPlaylist", JSON.stringify(videos));
+    router.push(`/video-player?videoId=${videoId}`);
+  };
+
   const getMediaUrl = (url: string) =>
     url.startsWith("http") ? url : `https://api.mapman.in${url}`;
 
@@ -110,7 +116,8 @@ export default function CategoryVideosPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: (idx % 10) * 0.1 }}
-              className="group relative bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800/60 hover:border-primary/40 shadow-md hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-2 z-10"
+              onClick={() => handleVideoClick(video.id)}
+              className="group relative bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800/60 hover:border-primary/40 shadow-md hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-2 z-10 cursor-pointer"
             >
               <div className="relative aspect-[4/3] overflow-hidden cursor-pointer bg-slate-100 dark:bg-slate-800 m-2 rounded-[1.5rem]">
                 {/* Views Badge */}

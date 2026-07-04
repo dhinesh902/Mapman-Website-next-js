@@ -16,8 +16,10 @@ import { getShopAnalyticsApi } from "@/services/apiService";
 import { ShopAnalyticsModel, TotalVideo } from "@/models/videos_model";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ShopAnalyticsPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [videos, setVideos] = useState<TotalVideo[]>([]);
   const [totalViews, setTotalViews] = useState(0);
@@ -39,6 +41,12 @@ export default function ShopAnalyticsPage() {
 
     fetchAnalytics();
   }, []);
+
+  const handleVideoClick = (videoId: number | undefined) => {
+    if (!videoId) return;
+    sessionStorage.setItem("videoPlaylist", JSON.stringify(videos));
+    router.push(`/video-player?videoId=${videoId}`);
+  };
 
   if (loading) {
     return (
@@ -170,7 +178,8 @@ export default function ShopAnalyticsPage() {
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="group bg-white dark:bg-slate-900 rounded-[1.5rem] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-lg shadow-slate-200/40 dark:shadow-none hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                  onClick={() => handleVideoClick(video.id)}
+                  className="group bg-white dark:bg-slate-900 rounded-[1.5rem] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-lg shadow-slate-200/40 dark:shadow-none hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1 transition-all duration-300 flex flex-col cursor-pointer"
                 >
                   <div className="relative aspect-video bg-black/5 overflow-hidden">
                     {video.thumbnail ? (

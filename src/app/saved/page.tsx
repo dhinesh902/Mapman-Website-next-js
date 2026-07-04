@@ -13,12 +13,14 @@ import {
   Loader2,
   Eye,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { fetchMySavedVideos, fetchSavedShops, saveOthersVideosApi, saveShopApi } from "@/services/apiService";
 import { MyVideosData } from "@/models/videos_model";
 import { Datum as ShopData } from "@/models/map_shops_model";
 
 export default function SavedPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"videos" | "shops">("videos");
 
   const [videos, setVideos] = useState<MyVideosData[]>([]);
@@ -103,6 +105,12 @@ export default function SavedPage() {
     } catch (error) {
       console.error("Error removing shop:", error);
     }
+  };
+
+  const handleVideoClick = (videoId: number | undefined) => {
+    if (!videoId) return;
+    sessionStorage.setItem("videoPlaylist", JSON.stringify(videos));
+    router.push(`/video-player?videoId=${videoId}`);
   };
 
   useEffect(() => {
@@ -198,7 +206,8 @@ export default function SavedPage() {
                   {videos.map((video) => (
                     <div
                       key={video.id}
-                      className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700 group flex flex-col"
+                      onClick={() => handleVideoClick(video.id)}
+                      className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700 group flex flex-col cursor-pointer"
                     >
                       <div className="relative h-48 bg-slate-900">
                         <img
@@ -233,7 +242,7 @@ export default function SavedPage() {
                             </span>
                           </span>
                         </div>
-                        <button onClick={() => video.id && handleRemoveVideo(video.id)} className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-sm font-semibold transition-colors mt-auto">
+                        <button onClick={(e) => { e.stopPropagation(); video.id && handleRemoveVideo(video.id); }} className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-sm font-semibold transition-colors mt-auto">
                           <Trash2 className="w-4 h-4" /> Remove
                         </button>
                       </div>
