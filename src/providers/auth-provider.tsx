@@ -159,8 +159,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
               <div className="p-8 md:p-10 flex-1 overflow-y-auto flex flex-col justify-center relative z-10">
                 <div className="mb-10">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl flex items-center justify-center mb-6 shadow-inner ring-1 ring-primary/20">
-                    <ShieldCheck className="w-8 h-8 text-primary" />
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl flex items-center justify-center mb-6 shadow-inner ring-1 ring-primary/20 p-2">
+                    <img src="app-logo.png" alt="app-logo" height={20}/>
                   </div>
                   <h2 className="text-3xl font-bold font-heading text-slate-900 dark:text-white mb-3">
                     {loginStep === 1 ? "Welcome Back" : "Verify OTP"}
