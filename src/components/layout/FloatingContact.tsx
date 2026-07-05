@@ -17,7 +17,12 @@ export default function FloatingContact() {
       <AnimatePresence>
         {isHovered && (
           <motion.div
-            initial={{ opacity: 0, y: 15, scale: 0.95, transformOrigin: "bottom right" }}
+            initial={{
+              opacity: 0,
+              y: 15,
+              scale: 0.95,
+              transformOrigin: "bottom right",
+            }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
@@ -31,11 +36,21 @@ export default function FloatingContact() {
               className="flex items-center gap-4 bg-transparent hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-slate-800 dark:text-white px-4 py-3 rounded-2xl transition-all duration-300 group"
             >
               <div className="bg-emerald-100 dark:bg-emerald-500/20 p-3 rounded-full text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">
-                <MessageCircle className="w-5 h-5" />
+                <img
+                  className="transition duration-300 group-hover:brightness-0 group-hover:invert"
+                  src="https://cdn-icons-png.flaticon.com/128/4423/4423697.png"
+                  alt="whatsapp"
+                  height={25}
+                  width={25}
+                />
               </div>
               <div className="flex flex-col pr-6">
-                <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">WhatsApp Us</span>
-                <span className="text-xs text-slate-500 font-medium">Quick response</span>
+                <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  WhatsApp Us
+                </span>
+                <span className="text-xs text-slate-500 font-medium">
+                  Quick response
+                </span>
               </div>
             </a>
 
@@ -45,11 +60,21 @@ export default function FloatingContact() {
               className="flex items-center gap-4 bg-transparent hover:bg-blue-50 dark:hover:bg-blue-500/10 text-slate-800 dark:text-white px-4 py-3 rounded-2xl transition-all duration-300 group"
             >
               <div className="bg-blue-100 dark:bg-blue-500/20 p-3 rounded-full text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all shadow-sm">
-                <Phone className="w-5 h-5" />
+                <img
+                  className="transition duration-300 group-hover:brightness-0 group-hover:invert"
+                  src=" https://cdn-icons-png.flaticon.com/128/18561/18561574.png"
+                  alt="whatsapp"
+                  height={25}
+                  width={25}
+                />
               </div>
               <div className="flex flex-col pr-6">
-                <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Call Support</span>
-                <span className="text-xs text-slate-500 font-medium">Mon-Fri, 9am-6pm</span>
+                <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  Call Support
+                </span>
+                <span className="text-xs text-slate-500 font-medium">
+                  Mon-Fri, 9am-6pm
+                </span>
               </div>
             </a>
 
