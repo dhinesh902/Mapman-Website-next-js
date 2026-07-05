@@ -19,10 +19,10 @@ import { getHomeData } from "@/services/apiService";
 import { TopBanner, Category, CategoryBanner, Shop } from "@/models/home_model";
 
 const stats = [
-  { label: "Shops", value: "10K+" },
+  { label: "Shops", value: "100+" },
   { label: "Cities", value: "500+" },
-  { label: "Users", value: "50K+" },
-  { label: "Searches", value: "1M+" },
+  { label: "Users", value: "100+" },
+  { label: "Searches", value: "200+" },
 ];
 
 const featuredLocations = [

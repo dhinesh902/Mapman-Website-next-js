@@ -173,7 +173,7 @@ export default function NotificationsPage() {
                           <img
                             src={
                               n.msgImage.startsWith("/")
-                                ? `https://api.mapman.in${n.msgImage}`
+                                ? `https://d7bnll1h35b3b.cloudfront.net${n.msgImage}`
                                 : n.msgImage
                             }
                             alt={n.msgTitle || "Notification"}

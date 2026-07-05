@@ -397,3 +397,43 @@ export const updateProfileApi = async (formData: FormData) => {
     throw error;
   }
 };
+
+export const sendEmailOtpApi = async (email: string) => {
+  try {
+    const response = await apiService.post("/shop/auth/sendEmailOtp", { email });
+    return response.data;
+  } catch (error) {
+    console.error("Error sending email OTP:", error);
+    throw error;
+  }
+};
+
+export const verifyEmailOtpApi = async (email: string, otp: number) => {
+  try {
+    const response = await apiService.post("/shop/auth/verifyEmailOtp", { email, otp });
+    return response.data;
+  } catch (error) {
+    console.error("Error verifying email OTP:", error);
+    throw error;
+  }
+};
+
+export const updateSendOtpApi = async (email: string, phone: string) => {
+  try {
+    const response = await apiService.post("/shop/auth/updateSendOtp", { email, phone });
+    return response.data;
+  } catch (error) {
+    console.error("Error sending update mobile OTP:", error);
+    throw error;
+  }
+};
+
+export const updateVerifyOtpApi = async (email: string, phone: string, otp: number) => {
+  try {
+    const response = await apiService.post("/shop/auth/updateVerifyOtp", { email, phone, otp });
+    return response.data;
+  } catch (error) {
+    console.error("Error verifying update mobile OTP:", error);
+    throw error;
+  }
+};

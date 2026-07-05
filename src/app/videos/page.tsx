@@ -307,7 +307,17 @@ export default function VideosPage() {
               const isVideoFile = mediaUrl.endsWith(".mp4") || mediaUrl.endsWith(".webm") || mediaUrl.endsWith(".m3u8");
 
               return (
-                <Link key={video.id} href={`/videos/${(video.categoryName || "").toLowerCase()}`} className="block">
+                <Link 
+                  key={video.id} 
+                  href={`/videos/${(video.categoryName || "").toLowerCase()}`} 
+                  className="block"
+                  onClick={(e) => {
+                    if (!isLoggedIn) {
+                      e.preventDefault();
+                      openLoginSidebar();
+                    }
+                  }}
+                >
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
