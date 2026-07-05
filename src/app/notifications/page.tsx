@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bell,
@@ -16,6 +17,7 @@ import { fetchNotificationsApi } from "@/services/apiService";
 import { NotificationData } from "@/models/home_model";
 
 export default function NotificationsPage() {
+  const router = useRouter();
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -65,6 +67,25 @@ export default function NotificationsPage() {
 
   const markAllAsRead = () => {
     setNotifications(notifications.map((n) => ({ ...n, readStatus: "read" })));
+  };
+
+  const handleNotificationClick = (n: NotificationData) => {
+    if (n.msgType === "newShop" && n.msgLink) {
+      router.push(`/shop/${n.msgLink}`);
+    } else if (n.msgType === "newVideo" && n.msgLink) {
+      const mediaUrl = n.msgImage?.startsWith("/") 
+        ? `https://d7bnll1h35b3b.cloudfront.net${n.msgImage}` 
+        : n.msgImage || "";
+        
+      const videoObj = {
+        id: Number(n.msgLink),
+        video: mediaUrl,
+        videoTitle: n.msgTitle,
+        description: n.msgDesc,
+      };
+      sessionStorage.setItem("videoPlaylist", JSON.stringify([videoObj]));
+      router.push(`/video-player?videoId=${n.msgLink}`);
+    }
   };
 
   const getIcon = (type: string) => {
@@ -161,11 +182,12 @@ export default function NotificationsPage() {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
-                      className={`group flex flex-col h-full rounded-[2rem] overflow-hidden border transition-all duration-300 hover:-translate-y-1 ${
+                      className={`group flex flex-col h-full rounded-[2rem] overflow-hidden border transition-all duration-300 hover:-translate-y-1 cursor-pointer ${
                         n.readStatus === "read"
                           ? "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-black/50"
                           : "bg-gradient-to-b from-primary/5 to-white dark:to-slate-900 border-primary/20 shadow-xl shadow-primary/5"
                       }`}
+                      onClick={() => handleNotificationClick(n)}
                     >
                       {/* Optional Media Banner */}
                       {n.msgImage && !n.msgImage.includes(".m3u8") ? (

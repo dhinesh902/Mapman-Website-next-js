@@ -52,7 +52,7 @@ export default function VideoPlayerPage() {
       const timer = setTimeout(() => {
         const element = document.getElementById(`video-${videoIdParam}`);
         if (element) {
-          element.scrollIntoView({ behavior: "auto" });
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       }, 100);
       return () => clearTimeout(timer);
@@ -82,7 +82,7 @@ export default function VideoPlayerPage() {
   }
 
   return (
-    <div className="h-screen w-full bg-slate-900 overflow-y-scroll snap-y snap-mandatory relative" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div className="h-screen w-full bg-slate-900 overflow-y-scroll snap-y snap-mandatory scroll-smooth relative" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
 
       {playlist.map((video) => (
         <VideoItem key={video.id} video={video} />
@@ -100,6 +100,7 @@ function VideoItem({ video }: { video: any }) {
   const [isBuffering, setIsBuffering] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -180,7 +181,7 @@ function VideoItem({ video }: { video: any }) {
     try {
       await saveOthersVideosApi(video.id, "active");
       setIsSaved(true);
-      setTimeout(() => setIsSaved(false), 3000);
+      alert("Video saved successfully!");
     } catch (err) {
       console.error(err);
       alert("Failed to save video. Please try again.");
@@ -193,12 +194,12 @@ function VideoItem({ video }: { video: any }) {
     <div
       id={`video-${video.id}`}
       ref={containerRef}
-      className="h-screen w-full snap-start snap-always shrink-0 flex items-center justify-center"
+      className="h-screen w-full snap-start snap-always shrink-0 flex items-center justify-center pt-20 lg:pt-28 pb-4 lg:pb-8 px-0 lg:px-8"
     >
-      <div className="w-full h-full flex flex-col bg-white dark:bg-slate-900 rounded-none overflow-hidden">
+      <div className="w-full h-full flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-none lg:rounded-3xl overflow-hidden lg:shadow-[0_20px_50px_rgba(0,0,0,0.4)] lg:border lg:border-slate-200 lg:dark:border-slate-800">
 
         {/* Player Container */}
-        <div className="relative flex-shrink bg-black flex items-center justify-center overflow-hidden group min-h-[40vh] md:min-h-[50vh]">
+        <div className="relative flex-shrink lg:flex-1 bg-gradient-to-b from-slate-900 to-black flex items-center justify-center overflow-hidden group min-h-[40vh] md:min-h-[50vh] lg:min-h-full">
           {isBuffering && (
             <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-sm">
               <Loader2 className="w-12 h-12 text-white animate-spin" />
@@ -209,97 +210,141 @@ function VideoItem({ video }: { video: any }) {
             <video
               ref={videoRef}
               src={mediaUrl}
-              className="w-full h-full object-contain max-h-[60vh]"
+              className="w-full h-full object-cover lg:object-contain max-h-[60vh] lg:max-h-full cursor-pointer"
               playsInline
               loop
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
               onWaiting={() => setIsBuffering(true)}
               onPlaying={() => setIsBuffering(false)}
+              onTimeUpdate={(e) => {
+                const videoElement = e.currentTarget;
+                if (videoElement.duration) {
+                  setProgress((videoElement.currentTime / videoElement.duration) * 100);
+                }
+              }}
               onClick={handlePlayPause}
               controls={false}
             />
           ) : (
-            <img src={mediaUrl} alt="Thumbnail" className="w-full h-full object-contain max-h-[60vh]" />
+            <img src={mediaUrl} alt="Thumbnail" className="w-full h-full object-cover lg:object-contain max-h-[60vh] lg:max-h-full" />
+          )}
+
+          {/* Central Play Button Overlay (when paused) */}
+          {isVideoFile && !isPlaying && !isBuffering && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+              <div className="w-10 h-10 bg-white/10 backdrop-blur-lg border border-white/20 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(255,255,255,0.1)] group-hover:scale-110 transition-transform duration-500">
+                <Play className="w-5 h-5 text-white" fill="white" />
+              </div>
+            </div>
           )}
 
           {/* Custom Controls Overlay */}
           {isVideoFile && (
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-4 text-white z-30">
-              <button onClick={(e) => { e.stopPropagation(); handlePlayPause(); }} className="hover:text-primary transition-colors">
-                {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
-              </button>
-              <button onClick={handleMuteToggle} className="hover:text-primary transition-colors">
-                {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
-              </button>
-              <div className="flex-1"></div>
-              <button onClick={handleFullscreen} className="hover:text-primary transition-colors">
-                <Maximize className="w-6 h-6" />
-              </button>
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-30 flex flex-col">
+              {/* Progress Bar */}
+              <div className="w-full h-1.5 bg-white/20 cursor-pointer relative group/progress" onClick={(e) => {
+                e.stopPropagation();
+                if (videoRef.current) {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const newProgress = (x / rect.width) * 100;
+                  videoRef.current.currentTime = (newProgress / 100) * videoRef.current.duration;
+                  setProgress(newProgress);
+                }
+              }}>
+                <div
+                  className="h-full bg-primary transition-all duration-75 ease-linear relative"
+                  style={{ width: `${progress}%` }}
+                >
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-white rounded-full shadow-lg scale-0 group-hover/progress:scale-100 transition-transform duration-200" />
+                </div>
+              </div>
+
+              <div className="p-4 md:p-6 flex items-center gap-4 text-white">
+                <button onClick={(e) => { e.stopPropagation(); handlePlayPause(); }} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-primary/90 hover:scale-110 transition-all backdrop-blur-md shadow-lg border border-white/10">
+                  {isPlaying ? <Pause className="w-5 h-5 fill-white" /> : <Play className="w-5 h-5 ml-1 fill-white" />}
+                </button>
+                <button onClick={handleMuteToggle} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 hover:scale-110 transition-all backdrop-blur-md shadow-lg border border-white/10">
+                  {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                </button>
+                <div className="flex-1"></div>
+                <button onClick={handleFullscreen} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 hover:scale-110 transition-all backdrop-blur-md shadow-lg border border-white/10">
+                  <Maximize className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           )}
         </div>
 
         {/* Details Section (Scrollable if needed) */}
-        <div className="p-6 md:p-8 overflow-y-auto">
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
-            <div className="flex-1">
-              <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
+        <div className="flex-1 p-5 md:p-8 overflow-y-auto bg-white dark:bg-slate-900/95 backdrop-blur-xl border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.3)] z-40 relative lg:w-[450px] lg:shrink-0 lg:h-full flex flex-col">
+
+          <div className="flex-1 flex flex-col">
+            <div className="flex justify-between items-start gap-4 mb-4">
+              <h1 className="text-xl md:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 font-heading tracking-tight leading-tight">
                 {video.videoTitle || video.categoryName || "Untitled Video"}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-slate-500 dark:text-slate-400 mb-6">
-                {video.shopName && (
-                  <div className="flex items-center gap-1.5 text-primary bg-primary/10 px-3 py-1.5 rounded-lg">
-                    <MapPin className="w-4 h-4" />
-                    {video.shopName}
-                  </div>
-                )}
-                {video.views !== undefined && (
-                  <div className="flex items-center gap-1.5">
-                    <Eye className="w-4 h-4" />
-                    {video.views} Views
-                  </div>
-                )}
-                {video.createdAt && (
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4" />
-                    {new Date(video.createdAt).toLocaleDateString()}
-                  </div>
-                )}
+              {/* Action Buttons (Top Right) */}
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={handleShareWhatsApp}
+                  className="flex items-center justify-center p-2.5 bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/30 hover:bg-[#25D366] hover:text-white rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-[#25D366]/30 group"
+                  title="Share"
+                >
+                  <Share2 className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                </button>
+                <button
+                  onClick={handleSaveVideo}
+                  disabled={isSaving || isSaved}
+                  className={`flex items-center justify-center p-2.5 rounded-xl transition-all duration-300 hover:shadow-lg group ${isSaved
+                    ? "bg-emerald-500 text-white shadow-emerald-500/30"
+                    : "bg-gradient-to-r from-primary to-accent text-white hover:shadow-primary/30"
+                    }`}
+                  title="Save"
+                >
+                  {isSaving ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : isSaved ? (
+                    <Check className="w-5 h-5" />
+                  ) : (
+                    <BookmarkPlus className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  )}
+                </button>
               </div>
+            </div>
 
-              <p className="text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl whitespace-pre-wrap line-clamp-2">
+            <div className="flex flex-wrap items-center gap-2 mb-6">
+              {video.shopName && (
+                <div className="flex items-center gap-1.5 text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full shadow-sm text-sm font-semibold">
+                  <MapPin className="w-4 h-4" />
+                  {video.shopName}
+                </div>
+              )}
+              {video.views !== undefined && (
+                <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-3 py-1 rounded-full shadow-sm text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  <Eye className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                  {video.views} Views
+                </div>
+              )}
+              {video.createdAt && (
+                <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-3 py-1 rounded-full shadow-sm text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  <Calendar className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                  {new Date(video.createdAt).toLocaleDateString()}
+                </div>
+              )}
+            </div>
+
+            <div className="bg-slate-50 dark:bg-slate-800/40 rounded-2xl p-5 mb-6 border border-slate-100 dark:border-slate-700/50">
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Description</h3>
+              <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap text-sm md:text-base font-medium">
                 {video.description || "No description provided."}
               </p>
             </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-3 shrink-0">
-              <button
-                onClick={handleShareWhatsApp}
-                className="flex items-center gap-2 px-5 py-2.5 bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366] hover:text-white rounded-xl font-bold transition-all duration-300 shadow-sm"
-              >
-                <Share2 className="w-5 h-5" /> Share
-              </button>
-              <button
-                onClick={handleSaveVideo}
-                disabled={isSaving || isSaved}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all duration-300 shadow-sm ${isSaved
-                  ? "bg-emerald-500 text-white"
-                  : "bg-primary text-white hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30"
-                  }`}
-              >
-                {isSaving ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : isSaved ? (
-                  <><Check className="w-5 h-5" /> Saved</>
-                ) : (
-                  <><BookmarkPlus className="w-5 h-5" /> Save</>
-                )}
-              </button>
-            </div>
           </div>
+
+
         </div>
 
       </div>

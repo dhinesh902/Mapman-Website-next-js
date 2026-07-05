@@ -174,19 +174,43 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Minimalist Services List */}
-      <section className="px-4 md:px-8 max-w-7xl mx-auto w-full py-24">
-        <div className="max-w-2xl mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold font-heading text-slate-900 dark:text-white mb-6">
-            Services We Offer
-          </h2>
-          <p className="text-xl text-slate-600 dark:text-slate-400">
+      {/* Enhanced Services Section */}
+      <section className="px-4 md:px-8 max-w-7xl mx-auto w-full py-24 relative">
+        {/* Soft Background Highlight */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-100/30 dark:via-slate-900/30 to-transparent -z-10 rounded-[4rem]" />
+        
+        <div className="text-center max-w-3xl mx-auto mb-20 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-bold tracking-widest uppercase mb-6 shadow-sm"
+          >
+            What We Do
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-4xl lg:text-4xl font-extrabold font-heading text-slate-900 dark:text-white mb-6 tracking-tight leading-[1.1]"
+          >
+            Premium Services for <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Modern Explorers</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-lg md:text-xl text-slate-600 dark:text-slate-400 font-medium"
+          >
             Engineered to deliver high utility for neighborhood explorers and
             maximum ROI for registered business owners.
-          </p>
+          </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-10 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto relative z-10">
           {[
             {
               icon: MapPin,
@@ -195,6 +219,8 @@ export default function AboutPage() {
               color: "text-blue-500",
               bg: "bg-blue-500/10 border-blue-500/20",
               glow: "group-hover:shadow-blue-500/20",
+              gradient: "from-blue-500/5 via-transparent to-transparent",
+              line: "bg-blue-500/50"
             },
             {
               icon: Play,
@@ -203,6 +229,8 @@ export default function AboutPage() {
               color: "text-accent",
               bg: "bg-accent/10 border-accent/20",
               glow: "group-hover:shadow-accent/20",
+              gradient: "from-accent/5 via-transparent to-transparent",
+              line: "bg-accent/50"
             },
             {
               icon: TrendingUp,
@@ -211,6 +239,8 @@ export default function AboutPage() {
               color: "text-emerald-500",
               bg: "bg-emerald-500/10 border-emerald-500/20",
               glow: "group-hover:shadow-emerald-500/20",
+              gradient: "from-emerald-500/5 via-transparent to-transparent",
+              line: "bg-emerald-500/50"
             },
             {
               icon: Users,
@@ -219,6 +249,8 @@ export default function AboutPage() {
               color: "text-violet-500",
               bg: "bg-violet-500/10 border-violet-500/20",
               glow: "group-hover:shadow-violet-500/20",
+              gradient: "from-violet-500/5 via-transparent to-transparent",
+              line: "bg-violet-500/50"
             },
           ].map((service, idx) => (
             <motion.div
@@ -227,11 +259,13 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1, duration: 0.5 }}
-              className={`group relative p-8 md:p-10 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${service.glow} overflow-hidden`}
+              className={`group relative p-8 md:p-10 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${service.glow} overflow-hidden`}
             >
-              {/* Animated Glow Background */}
+              {/* Animated Background Gradients */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+              
               <div
-                className={`absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[60px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 ${service.bg.split(" ")[0]}`}
+                className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[80px] opacity-0 group-hover:opacity-50 transition-opacity duration-700 ${service.bg.split(" ")[0]}`}
               />
 
               <div className="flex flex-col h-full relative z-10">
@@ -245,9 +279,12 @@ export default function AboutPage() {
                   {service.title}
                 </h3>
 
-                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed mt-auto">
+                <p className="text-lg text-slate-600 dark:text-slate-500 leading-relaxed mt-auto font-medium">
                   {service.desc}
                 </p>
+                
+                {/* Decorative Line */}
+                <div className={`w-0 h-1 mt-8 rounded-full transition-all duration-500 group-hover:w-16 ${service.line}`} />
               </div>
             </motion.div>
           ))}

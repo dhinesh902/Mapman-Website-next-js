@@ -9,7 +9,7 @@ export default function FloatingContact() {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div 
+    <div
       className="fixed bottom-6 right-6 z-[100] flex flex-col items-end"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -52,15 +52,15 @@ export default function FloatingContact() {
                 <span className="text-xs text-slate-500 font-medium">Mon-Fri, 9am-6pm</span>
               </div>
             </a>
-            
+
             <div className="h-px w-full bg-slate-100 dark:bg-slate-800 my-1" />
-            
+
             {/* Contact Page Link */}
-            <Link 
+            <Link
               href="/contact"
               className="flex items-center justify-between px-4 py-2.5 text-sm font-semibold text-slate-500 hover:text-primary transition-colors group"
             >
-              Visit Contact Page 
+              Visit Contact Page
               <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </motion.div>
@@ -78,7 +78,7 @@ export default function FloatingContact() {
         >
           {/* Animated ping effect */}
           <span className="absolute inset-0 rounded-full bg-white/30 opacity-20 animate-ping group-hover:opacity-40 transition-opacity" />
-          
+
           <Headset className="w-7 h-7 relative z-10 group-hover:scale-110 transition-transform duration-300" />
         </motion.div>
       </Link>
