@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const placeId = searchParams.get('place_id');
 
   if (placeId) {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${apiKey}`;
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${apiKey}`;
     try {
       const response = await fetch(url);
       const data = await response.json();

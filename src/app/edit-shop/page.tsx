@@ -76,8 +76,8 @@ export default function EditShopPage() {
     try {
       const res = await fetch(`/api/places?place_id=${place.place_id}`);
       const data = await res.json();
-      if (data.results && data.results[0]) {
-        const { lat, lng } = data.results[0].geometry.location;
+      if (data.result && data.result.geometry) {
+        const { lat, lng } = data.result.geometry.location;
         setMapCenter([lat, lng]);
         setSelectedAddress(place.description);
       }
@@ -583,7 +583,7 @@ export default function EditShopPage() {
                   <button 
                     type="button" 
                     onClick={() => {
-                      setValue("address", selectedAddress);
+                      setValue("address", selectedAddress, { shouldValidate: true, shouldDirty: true });
                       setIsMapOpen(false);
                     }}
                     disabled={!selectedAddress}

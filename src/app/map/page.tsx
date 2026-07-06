@@ -74,6 +74,7 @@ function MapPageContent() {
   const [shops, setShops] = useState<Shop[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isFetching, setIsFetching] = useState(true);
+  const [selectedShopId, setSelectedShopId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchShops = async () => {
@@ -154,6 +155,7 @@ function MapPageContent() {
             return (
               <div
                 key={shop.id}
+                onClick={() => setSelectedShopId(shop.id ? String(shop.id) : null)}
                 className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-3 flex gap-4 shadow-sm border border-slate-200/60 dark:border-slate-700/60 hover:shadow-lg hover:-translate-y-1 hover:border-primary/30 transition-all cursor-pointer group"
               >
                 <div className="relative w-28 h-28 rounded-xl overflow-hidden shrink-0 shadow-inner">
@@ -193,10 +195,22 @@ function MapPageContent() {
                   </p>
 
                   <div className="mt-auto pt-2 flex gap-2">
-                    <button className="flex-1 bg-slate-100 hover:bg-primary hover:text-white dark:bg-slate-700 dark:hover:bg-primary text-slate-700 dark:text-slate-200 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (shop.lat && shop.long) {
+                          window.open(`https://www.google.com/maps/dir/?api=1&destination=${shop.lat},${shop.long}`, '_blank');
+                        }
+                      }}
+                      className="flex-1 bg-slate-100 hover:bg-primary hover:text-white dark:bg-slate-700 dark:hover:bg-primary text-slate-700 dark:text-slate-200 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                    >
                       <Navigation className="w-3.5 h-3.5" /> Navigate
                     </button>
-                    <Link href={`/shop/${shop.id}`} className="flex-1 bg-primary text-white hover:bg-primary/90 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center transition-colors shadow-sm">
+                    <Link 
+                      href={`/shop/${shop.id}`} 
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex-1 bg-primary text-white hover:bg-primary/90 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center transition-colors shadow-sm"
+                    >
                       View Details
                     </Link>
                   </div>
@@ -215,7 +229,7 @@ function MapPageContent() {
 
       {/* Right Map Area */}
       <div className="flex-1 relative bg-slate-100 dark:bg-slate-800 z-0 h-[50vh] md:h-auto">
-        <MapView locations={filteredShops} />
+        <MapView locations={filteredShops} selectedShopId={selectedShopId} />
       </div>
     </div>
   );

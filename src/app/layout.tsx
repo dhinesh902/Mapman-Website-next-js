@@ -19,9 +19,53 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "MAPMAN - Discover Nearby Businesses",
+  title: "MAPMAN - Discover Nearby Businesses & Local Shops",
   description:
-    "Find trusted shops, services, and local businesses around you instantly using our interactive map platform.",
+    "Mapman is your ultimate local search platform. Find trusted shops, services, and local businesses around you instantly using our interactive map and business directory.",
+  applicationName: "Mapman",
+  keywords: [
+    "Mapman",
+    "Nearby Shops",
+    "Local Businesses",
+    "Business Directory",
+    "Shop Near Me",
+    "Local Search",
+    "Business Finder",
+    "Store Locator",
+    "Maps Navigation",
+    "Local Services",
+    "Business Listings",
+    "Nearby Services",
+    "Discover Businesses",
+    "Business Reviews",
+    "Explore Nearby",
+    "Local Marketplace",
+  ],
+  authors: [{ name: "Mapman" }],
+  creator: "Mapman",
+  publisher: "Mapman",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://mapman.in/",
+    siteName: "Mapman",
+    title: "MAPMAN - Discover Nearby Businesses",
+    description: "Find trusted shops, services, and local businesses around you instantly using Mapman's interactive local search platform.",
+    images: [
+      {
+        url: "/app-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Mapman - Local Business Directory",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MAPMAN - Discover Nearby Businesses",
+    description: "Find trusted shops, services, and local businesses around you instantly.",
+    images: ["/app-logo.png"],
+  },
 };
 
 export default function RootLayout({

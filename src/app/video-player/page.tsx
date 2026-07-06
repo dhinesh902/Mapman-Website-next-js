@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { saveOthersVideosApi } from "@/services/apiService";
 
-export default function VideoPlayerPage() {
+function VideoPlayerContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const videoIdParam = searchParams.get("videoId");
@@ -88,6 +88,14 @@ export default function VideoPlayerPage() {
         <VideoItem key={video.id} video={video} />
       ))}
     </div>
+  );
+}
+
+export default function VideoPlayerPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950"><Loader2 className="w-12 h-12 text-primary animate-spin" /></div>}>
+      <VideoPlayerContent />
+    </Suspense>
   );
 }
 

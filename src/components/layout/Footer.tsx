@@ -53,7 +53,7 @@ export default function Footer() {
               instantly using our interactive map platform. Your neighborhood,
               simplified.
             </p>
-            {/* <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3 mt-6">
               <SocialIcon Icon={MessageCircle} href="#" />
               <SocialIcon Icon={Camera} href="#" />
               <SocialIcon Icon={Briefcase} href="#" />
@@ -95,65 +95,65 @@ export default function Footer() {
             <h3 className="font-extrabold text-lg mb-6 text-slate-900 dark:text-white uppercase tracking-wider text-sm">
               Get in Touch
             </h3>
-            <ul className="space-y-5">
-              <li className="flex gap-4 items-start group">
-                <div className="mt-1 bg-primary/10 p-2 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+            <ul className="space-y-4">
+              <li className="flex gap-4 items-center group p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-800">
+                <div className="bg-primary/10 p-2.5 rounded-xl text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-accent group-hover:text-white transition-all shadow-sm group-hover:shadow-primary/30">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 dark:text-white mb-0.5 text-sm">
+                  <p className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wider mb-0.5 opacity-70">
                     Location
                   </p>
-                  <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">
+                  <p className="text-slate-600 dark:text-slate-300 font-medium text-sm">
                     Coimbatore, Tamilnadu India.
                   </p>
                 </div>
               </li>
-              <li className="flex gap-4 items-start group">
-                <div className="mt-1 bg-primary/10 p-2 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+              <li className="flex gap-4 items-center group p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-800">
+                <div className="bg-primary/10 p-2.5 rounded-xl text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-accent group-hover:text-white transition-all shadow-sm group-hover:shadow-primary/30">
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 dark:text-white mb-0.5 text-sm">
+                  <p className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wider mb-0.5 opacity-70">
                     Email
                   </p>
                   <a
                     href="mailto:mapman6760@gmail.com"
-                    className="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors font-medium text-sm block"
+                    className="text-slate-600 dark:text-slate-300 hover:text-primary transition-colors font-medium text-sm block"
                   >
                     mapman6760@gmail.com
                   </a>
                 </div>
               </li>
-              <li className="flex gap-4 items-start group">
-                <div className="mt-1 bg-primary/10 p-2 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+              <li className="flex gap-4 items-center group p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-800">
+                <div className="bg-primary/10 p-2.5 rounded-xl text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-accent group-hover:text-white transition-all shadow-sm group-hover:shadow-primary/30">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 dark:text-white mb-0.5 text-sm">
+                  <p className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wider mb-0.5 opacity-70">
                     Phone
                   </p>
                   <a
                     href="tel:+919342376760"
-                    className="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors font-medium text-sm block"
+                    className="text-slate-600 dark:text-slate-300 hover:text-primary transition-colors font-medium text-sm block"
                   >
                     +91 9342376760
                   </a>
                 </div>
               </li>
-              <li className="flex gap-4 items-start group">
-                <div className="mt-1 bg-primary/10 p-2 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+              <li className="flex gap-4 items-center group p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-800">
+                <div className="bg-primary/10 p-2.5 rounded-xl text-primary group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-accent group-hover:text-white transition-all shadow-sm group-hover:shadow-primary/30">
                   <Globe className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 dark:text-white mb-0.5 text-sm">
+                  <p className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wider mb-0.5 opacity-70">
                     Website
                   </p>
                   <a
                     href="https://pafagelsoftwaresolutionspvtltd.in"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors font-medium text-sm block"
+                    className="text-slate-600 dark:text-slate-300 hover:text-primary transition-colors font-medium text-sm block"
                   >
                     pafagelsoftwaresolutionspvtltd.in
                   </a>
@@ -213,14 +213,19 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-slate-200 dark:border-slate-800/60 pt-8 flex flex-col items-center justify-center text-center text-slate-500 font-medium text-sm">
+        <div className="border-t border-slate-200 dark:border-slate-800/60 pt-8 pb-4 flex flex-col md:flex-row items-center justify-between text-center md:text-left text-slate-500 font-medium text-sm gap-4">
           <p>
-            © 2026{" "}
-            <span className="font-bold text-slate-900 dark:text-white">
+            © {new Date().getFullYear()}{" "}
+            <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
               MAPMAN
             </span>
             . All Rights Reserved.
           </p>
+          <div className="flex items-center gap-1.5 text-xs bg-slate-50 dark:bg-slate-900 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-800">
+            <span>Made with</span>
+            <span className="text-red-500 animate-pulse">❤️</span>
+            <span>for local businesses</span>
+          </div>
         </div>
       </div>
     </footer>

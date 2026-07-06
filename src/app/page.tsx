@@ -426,42 +426,50 @@ export default function Home() {
             {categoryBanners.map((banner, idx) => (
               <motion.div
                 key={banner.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 40 }}
+                onClick={() => router.push(`/map?category=${encodeURIComponent(banner.category)}`)}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.1, duration: 0.6 }}
-                className="relative bg-slate-900 rounded-[2rem] overflow-hidden group h-[280px] md:h-[320px] lg:h-[360px] flex flex-col justify-between p-6 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 border border-slate-200 dark:border-slate-800"
+                transition={{ delay: idx * 0.1, duration: 0.7, ease: "easeOut" }}
+                className="relative rounded-[2rem] overflow-hidden group h-[250px] md:h-[280px] lg:h-[320px] flex flex-col justify-end shadow-lg hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 z-10 cursor-pointer"
               >
+                {/* Image */}
                 <Image
                   src={getImageUrl(banner.backgroundImage)}
                   alt={banner.title}
                   fill
-                  className="object-cover opacity-60 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 
-                {/* Gradient Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 pointer-events-none" />
-                <div className="absolute inset-0 bg-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none mix-blend-overlay" />
-
-                {/* Top Section */}
-                <div className="relative z-10 flex justify-end">
-                  <span className="px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white text-xs font-extrabold uppercase tracking-widest shadow-lg group-hover:bg-primary/90 group-hover:border-primary transition-colors duration-300">
-                    {banner.category}
-                  </span>
+                {/* Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/90 z-0 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 mix-blend-overlay pointer-events-none" />
+                
+                {/* Category Badge - Top Right */}
+                <div className="absolute top-5 right-5 z-20">
+                  <div className="px-4 py-1.5 bg-black/40 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-bold uppercase tracking-[0.2em] shadow-lg overflow-hidden relative group/badge transition-colors hover:bg-black/60">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                    <span className="relative z-10">{banner.category}</span>
+                  </div>
                 </div>
 
-                {/* Bottom Section */}
-                <div className="relative z-10 text-white transform transition-all duration-500 group-hover:-translate-y-2">
-                  <h3 className="text-2xl md:text-3xl font-black mb-4 capitalize leading-tight drop-shadow-md">
-                    {banner.title}
-                  </h3>
-                  <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 bg-primary hover:bg-white text-white hover:text-slate-900 px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg shadow-primary/30 active:scale-95 group/btn">
-                      {banner.contact || "Explore Now"}
-                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
-                    {/* Decorative glowing dot */}
-                    <div className="w-2 h-2 rounded-full bg-white/50 group-hover:bg-white group-hover:animate-ping transition-colors" />
+                {/* Content Box (Glassmorphism) */}
+                <div className="relative z-20 p-3 md:p-4 w-full transform transition-transform duration-500 translate-y-3 group-hover:translate-y-0">
+                  <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl relative overflow-hidden group-hover:bg-white/20 transition-colors duration-500">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                    
+                    <h3 className="text-lg md:text-xl lg:text-2xl font-black text-white mb-1 capitalize drop-shadow-md relative z-10">
+                      {banner.title}
+                    </h3>
+                    
+                    <div className="flex items-center justify-between relative z-10 mt-2">
+                      <span className="text-slate-200 text-xs md:text-sm font-semibold flex items-center gap-2 group-hover:text-white transition-colors">
+                        {banner.contact || "Explore Collection"}
+                      </span>
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white text-slate-900 flex items-center justify-center transform group-hover:-rotate-45 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-md shrink-0">
+                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>

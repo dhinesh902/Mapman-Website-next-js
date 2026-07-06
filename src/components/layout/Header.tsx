@@ -30,6 +30,18 @@ export default function Header() {
     }
   };
 
+  const handleAppDownload = () => {
+    if (typeof window === "undefined") return;
+    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+    if (/android/i.test(userAgent)) {
+      window.open("https://play.google.com/store/apps/details?id=com.mapman.mapman", "_blank");
+    } else if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream) {
+      window.open("https://apps.apple.com/in/app/mapman-app/id6762550173", "_blank");
+    } else {
+      window.open("https://play.google.com/store/apps/details?id=com.mapman.mapman", "_blank");
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -43,7 +55,7 @@ export default function Header() {
       {/* Top Banner */}
       <div className="bg-gradient-to-r from-primary via-accent to-primary w-full py-2 px-4 text-center z-50 shadow-sm">
         <p className="text-white text-xs md:text-sm font-semibold tracking-wide">
-          Powered by Pafagel Software Solutions Pvt Ltd. Discover the best local shops and reels! | <span className="underline cursor-pointer font-extrabold ml-1 hover:text-white/80 transition-colors">Join Mapman Today!</span>
+          Powered by Pafagel Software Solutions Pvt Ltd. Discover the best local shops and reels! | <span onClick={handleAppDownload} className="underline cursor-pointer font-extrabold ml-1 hover:text-white/80 transition-colors">Join Mapman Today!</span>
         </p>
       </div>
 
