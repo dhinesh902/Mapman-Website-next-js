@@ -53,9 +53,12 @@ export default function Header() {
   return (
     <header className="fixed top-0 w-full z-50 flex flex-col">
       {/* Top Banner */}
-      <div className="bg-gradient-to-r from-primary via-accent to-primary w-full py-2 px-4 text-center z-50 shadow-sm">
-        <p className="text-white text-xs md:text-sm font-semibold tracking-wide">
-          Powered by Pafagel Software Solutions Pvt Ltd. Discover the best local shops and reels! | <span onClick={handleAppDownload} className="underline cursor-pointer font-extrabold ml-1 hover:text-white/80 transition-colors">Join Mapman Today!</span>
+      <div className="bg-gradient-to-r from-primary via-accent to-primary w-full py-1.5 md:py-2 px-2 md:px-4 text-center z-50 shadow-sm">
+        <p className="text-white text-[10px] sm:text-xs md:text-sm font-semibold tracking-wide line-clamp-1">
+          <span className="hidden md:inline">Powered by Pafagel Software Solutions Pvt Ltd. </span>
+          <span className="hidden sm:inline">Discover the best local shops and reels! | </span>
+          <span className="sm:hidden">Best local shops & reels! | </span>
+          <span onClick={handleAppDownload} className="underline cursor-pointer font-extrabold ml-1 hover:text-white/80 transition-colors">Join Mapman Today!</span>
         </p>
       </div>
 
