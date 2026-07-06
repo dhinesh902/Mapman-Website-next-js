@@ -20,7 +20,8 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "MAPMAN - Discover Nearby Businesses",
-  description: "Find trusted shops, services, and local businesses around you instantly using our interactive map platform.",
+  description:
+    "Find trusted shops, services, and local businesses around you instantly using our interactive map platform.",
 };
 
 export default function RootLayout({
@@ -29,15 +30,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable} scroll-smooth`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${outfit.variable} scroll-smooth`}
+    >
       <body className="antialiased min-h-screen flex flex-col font-sans">
         <QueryProvider>
           <AuthProvider>
             <ScrollToTop />
             <Header />
-            <main className="flex-1 pt-[80px]">
-              {children}
-            </main>
+            <main className="flex-1 pt-[112px]">{children}</main>
+
             <Footer />
             <FloatingContact />
           </AuthProvider>

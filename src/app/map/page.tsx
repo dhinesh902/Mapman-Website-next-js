@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import dynamic from "next/dynamic";
 import { Search, Filter, Star, Navigation, MapPin, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 // Dynamically import the map component with SSR disabled
 const MapView = dynamic(() => import("./MapView"), {
@@ -66,8 +67,10 @@ const checkIfOpen = (openTime?: string, closeTime?: string) => {
   }
 };
 
-export default function MapPage() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+function MapPageContent() {
+  const searchParams = useSearchParams();
+  const catParam = searchParams.get("category");
+  const [selectedCategory, setSelectedCategory] = useState(catParam || "All");
   const [shops, setShops] = useState<Shop[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isFetching, setIsFetching] = useState(true);
@@ -76,7 +79,7 @@ export default function MapPage() {
     const fetchShops = async () => {
       setIsFetching(true);
       try {
-        const query = selectedCategory === "All" ? "" : selectedCategory.toLowerCase();
+        const query = (selectedCategory.toLowerCase() === "all" || selectedCategory.toLowerCase() === "others") ? "" : selectedCategory.toLowerCase();
         const res = await searchShops(query);
         if (res && res.data) {
           setShops(res.data);
@@ -95,7 +98,8 @@ export default function MapPage() {
 
   const filteredShops = shops.filter((shop) => {
     const matchCat =
-      selectedCategory === "All" ||
+      selectedCategory.toLowerCase() === "all" ||
+      selectedCategory.toLowerCase() === "others" ||
       shop.category?.toLowerCase() === selectedCategory.toLowerCase();
     const query = searchQuery.toLowerCase();
     const matchSearch =
@@ -126,9 +130,9 @@ export default function MapPage() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${selectedCategory === cat
-                    ? "bg-primary text-white shadow-sm"
-                    : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${selectedCategory.toLowerCase() === cat.toLowerCase()
+                  ? "bg-primary text-white shadow-sm"
+                  : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                   }`}
               >
                 {cat}
@@ -214,5 +218,13 @@ export default function MapPage() {
         <MapView locations={filteredShops} />
       </div>
     </div>
+  );
+}
+
+export default function MapPage() {
+  return (
+    <Suspense fallback={<div className="w-full h-[calc(100vh-80px)] flex items-center justify-center bg-slate-50 dark:bg-slate-900"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>}>
+      <MapPageContent />
+    </Suspense>
   );
 }

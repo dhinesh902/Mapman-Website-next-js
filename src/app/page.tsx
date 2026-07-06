@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { getHomeData } from "@/services/apiService";
 import { TopBanner, Category, CategoryBanner, Shop } from "@/models/home_model";
 
@@ -129,6 +130,7 @@ const getHoverImage = (shop: Shop) => {
 };
 
 export default function Home() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [topBanners, setTopBanners] = useState<TopBanner[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -369,6 +371,7 @@ export default function Home() {
             {categories.map((category, idx) => (
               <motion.div
                 key={category.id}
+                onClick={() => router.push(`/map?category=${encodeURIComponent(category.categoryName)}`)}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}

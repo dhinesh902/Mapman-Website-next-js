@@ -86,15 +86,15 @@ function ShopMarker({ loc }: { loc: Shop }) {
   const markerRef = useRef<L.Marker>(null);
 
   return (
-    <Marker 
+    <Marker
       ref={markerRef}
       position={[parseFloat(loc.lat as string), parseFloat(loc.long as string)]}
       icon={createCustomIcon(loc.category)}
     >
-      <Tooltip 
+      <Tooltip
         permanent
         interactive
-        direction="top" 
+        direction="top"
         offset={[0, -10]}
         className="bg-transparent border-none shadow-none p-0"
         eventHandlers={{
@@ -103,7 +103,7 @@ function ShopMarker({ loc }: { loc: Shop }) {
           }
         }}
       >
-        <div 
+        <div
           className="bg-white rounded-md py-1 px-1.5 text-center min-w-[70px] max-w-[120px] shadow-sm cursor-pointer"
           style={{ border: `2px solid ${getCategoryColor(loc.category)}` }}
           onClick={(e) => {
@@ -124,7 +124,7 @@ function ShopMarker({ loc }: { loc: Shop }) {
             <h3 className="font-bold text-base mb-1">{loc.shopName}</h3>
             <p className="text-primary text-xs font-semibold mb-2">{loc.category}</p>
             <div className="flex items-start gap-1 text-xs text-slate-600 mb-3">
-              <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" /> 
+              <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" />
               <span className="line-clamp-2">{loc.address}</span>
             </div>
             <button className="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-md text-xs font-semibold flex items-center justify-center gap-1 transition-colors">

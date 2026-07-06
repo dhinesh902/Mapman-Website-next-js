@@ -39,14 +39,22 @@ export default function Header() {
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ease-out ${
-        isScrolled
-          ? "bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-b border-slate-200/50 dark:border-slate-800/50 py-3"
-          : "bg-transparent py-5 lg:py-6"
-      }`}
-    >
-      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 flex items-center justify-between">
+    <header className="fixed top-0 w-full z-50 flex flex-col">
+      {/* Top Banner */}
+      <div className="bg-gradient-to-r from-primary via-accent to-primary w-full py-2 px-4 text-center z-50 shadow-sm">
+        <p className="text-white text-xs md:text-sm font-semibold tracking-wide">
+          Powered by Pafagel Software Solutions Pvt Ltd. Discover the best local shops and reels! | <span className="underline cursor-pointer font-extrabold ml-1 hover:text-white/80 transition-colors">Join Mapman Today!</span>
+        </p>
+      </div>
+
+      <div
+        className={`w-full transition-all duration-500 ease-out ${
+          isScrolled
+            ? "bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-b border-slate-200/50 dark:border-slate-800/50 py-3"
+            : "bg-transparent py-5 lg:py-6"
+        }`}
+      >
+        <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="bg-white dark:bg-slate-900 p-1.5 rounded-[14px] shadow-lg shadow-primary/30 border border-slate-100 dark:border-slate-800 group-hover:scale-110 transition-transform flex items-center justify-center">
@@ -191,6 +199,7 @@ export default function Header() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </header>
   );
 }
