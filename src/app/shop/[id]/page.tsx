@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getShopById } from "@/services/apiService";
 import { Shop } from "@/models/home_model";
 import { CategoryVideoData } from "@/models/videos_model";
@@ -70,6 +71,13 @@ export default function ShopDetailsPage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleVideoClick = (videoId: number | undefined) => {
+    if (!videoId) return;
+    sessionStorage.setItem("videoPlaylist", JSON.stringify(videos));
+    router.push(`/video-player?videoId=${videoId}`);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -171,8 +179,8 @@ export default function ShopDetailsPage({
                 </span>
                 <span
                   className={`flex items-center gap-1.5 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-lg shadow-lg backdrop-blur-md border ${isOpen
-                      ? "bg-emerald-500/80 text-white border-emerald-400"
-                      : "bg-red-500/80 text-white border-red-400"
+                    ? "bg-emerald-500/80 text-white border-emerald-400"
+                    : "bg-red-500/80 text-white border-red-400"
                     }`}
                 >
                   <Clock className="w-3 h-3" />
@@ -383,7 +391,8 @@ export default function ShopDetailsPage({
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: idx * 0.1 }}
-                      className="group relative bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800/60 shadow-sm hover:shadow-xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-1"
+                      onClick={() => handleVideoClick(video.id)}
+                      className="group relative bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800/60 shadow-sm hover:shadow-xl hover:shadow-primary/20 transition-all duration-500 flex flex-col hover:-translate-y-1 cursor-pointer"
                     >
                       <div className="relative aspect-[4/3] overflow-hidden cursor-pointer bg-slate-100 dark:bg-slate-800 m-2 rounded-[1.5rem]">
                         {isVideoFile ? (

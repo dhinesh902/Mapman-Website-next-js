@@ -19,6 +19,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mapman.in"),
   title: "MAPMAN - Discover Nearby Businesses & Local Shops",
   description:
     "Mapman is your ultimate local search platform. Find trusted shops, services, and local businesses around you instantly using our interactive map and business directory.",
