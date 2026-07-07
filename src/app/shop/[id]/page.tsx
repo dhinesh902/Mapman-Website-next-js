@@ -137,7 +137,7 @@ export default function ShopDetailsPage({
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
       {/* Header Banner */}
-      <div className="relative w-full h-[300px] md:h-[400px] lg:h-[450px]">
+      <div className="relative w-full min-h-[380px] md:min-h-[450px] flex flex-col justify-end">
         <div
           className="absolute inset-0 cursor-pointer"
           onClick={() =>
@@ -170,7 +170,7 @@ export default function ShopDetailsPage({
           </Link>
         </div>
 
-        <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 lg:p-12 z-20">
+        <div className="relative z-20 w-full p-4 md:p-8 lg:p-12 pt-40">
           <div className="max-w-[1920px] mx-auto flex flex-col md:flex-row gap-6 md:items-end justify-between">
             <div>
               <div className="flex flex-wrap items-center gap-3 mb-3">

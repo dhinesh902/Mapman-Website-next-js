@@ -128,7 +128,7 @@ export default function ContactPage() {
                     <p className="font-semibold text-lg mb-1">
                       Phone & WhatsApp
                     </p>
-                    <div className="flex items-center gap-3 mt-1">
+                    <div className="flex flex-wrap items-center gap-2 md:gap-3 mt-1">
                       <a
                         href="tel:+919342376760"
                         className="text-slate-500 dark:text-slate-400 font-medium hover:text-primary transition-colors flex items-center gap-1"
@@ -173,7 +173,7 @@ export default function ContactPage() {
                       href="https://pafagelsoftwaresolutionspvtltd.in"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-500 transition-colors"
+                      className="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-500 transition-colors break-all"
                     >
                       pafagelsoftwaresolutionspvtltd.in
                     </a>
