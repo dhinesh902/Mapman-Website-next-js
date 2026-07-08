@@ -5,7 +5,8 @@ import dynamic from "next/dynamic";
 import { Search, Filter, Star, Navigation, MapPin, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useAuth } from "@/providers/auth-provider";
 
 // Dynamically import the map component with SSR disabled
 const MapView = dynamic(() => import("./MapView"), {
@@ -69,6 +70,8 @@ const checkIfOpen = (openTime?: string, closeTime?: string) => {
 
 function MapPageContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { isLoggedIn, openLoginSidebar } = useAuth();
   const catParam = searchParams.get("category");
   const [selectedCategory, setSelectedCategory] = useState(catParam || "All");
   const [shops, setShops] = useState<Shop[]>([]);
@@ -206,13 +209,19 @@ function MapPageContent() {
                     >
                       <Navigation className="w-3.5 h-3.5" /> Navigate
                     </button>
-                    <Link 
-                      href={`/shop/${shop.id}`} 
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex-1 bg-primary text-white hover:bg-primary/90 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center transition-colors shadow-sm"
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (isLoggedIn) {
+                          router.push(`/shop/${shop.id}`);
+                        } else {
+                          openLoginSidebar();
+                        }
+                      }}
+                      className="flex-1 bg-primary text-white hover:bg-primary/90 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center transition-colors shadow-sm cursor-pointer"
                     >
                       View Details
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>

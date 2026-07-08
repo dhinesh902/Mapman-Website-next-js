@@ -88,8 +88,10 @@ function ChangeView({
 
 import { useRef, useEffect as useMarkerEffect } from "react";
 import Image from "next/image";
+import { useAuth } from "@/providers/auth-provider";
 
 function ShopMarker({ loc, isSelected }: { loc: Shop; isSelected?: boolean }) {
+  const { isLoggedIn, openLoginSidebar } = useAuth();
   const markerRef = useRef<L.Marker>(null);
 
   useMarkerEffect(() => {
@@ -162,7 +164,11 @@ function ShopMarker({ loc, isSelected }: { loc: Shop; isSelected?: boolean }) {
             <button
               className="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-md text-xs font-semibold flex items-center justify-center gap-1 transition-colors cursor-pointer"
               onClick={() => {
-                window.location.href = `/shop/${loc.id}`;
+                if (isLoggedIn) {
+                  window.location.href = `/shop/${loc.id}`;
+                } else {
+                  openLoginSidebar();
+                }
               }}
             >
               <Navigation className="w-3 h-3" /> View Details

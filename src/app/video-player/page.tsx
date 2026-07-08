@@ -202,12 +202,12 @@ function VideoItem({ video }: { video: any }) {
     <div
       id={`video-${video.id}`}
       ref={containerRef}
-      className="h-screen w-full snap-start snap-always shrink-0 flex items-center justify-center pt-20 lg:pt-28 pb-4 lg:pb-8 px-0 lg:px-8"
+      className="h-screen w-full snap-start snap-always shrink-0 flex items-center justify-center pt-0 lg:pt-28 pb-0 lg:pb-8 px-0 lg:px-8 relative"
     >
-      <div className="w-full h-full flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-none lg:rounded-3xl overflow-hidden lg:shadow-[0_20px_50px_rgba(0,0,0,0.4)] lg:border lg:border-slate-200 lg:dark:border-slate-800">
+      <div className="w-full h-full flex flex-col lg:flex-row bg-transparent lg:bg-white lg:dark:bg-slate-900 rounded-none lg:rounded-3xl overflow-hidden lg:shadow-[0_20px_50px_rgba(0,0,0,0.4)] lg:border lg:border-slate-200 lg:dark:border-slate-800 relative">
 
         {/* Player Container */}
-        <div className="relative flex-shrink lg:flex-1 bg-gradient-to-b from-slate-900 to-black flex items-center justify-center overflow-hidden group min-h-[40vh] md:min-h-[50vh] lg:min-h-full">
+        <div className="absolute inset-0 lg:relative lg:inset-auto flex-shrink lg:flex-1 bg-black flex items-center justify-center overflow-hidden group min-h-[100vh] lg:min-h-full z-0">
           {isBuffering && (
             <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-sm">
               <Loader2 className="w-12 h-12 text-white animate-spin" />
@@ -218,7 +218,7 @@ function VideoItem({ video }: { video: any }) {
             <video
               ref={videoRef}
               src={mediaUrl}
-              className="w-full h-full object-cover lg:object-contain max-h-[60vh] lg:max-h-full cursor-pointer"
+              className="w-full h-full object-cover lg:object-contain cursor-pointer"
               playsInline
               loop
               onPlay={() => setIsPlaying(true)}
@@ -235,7 +235,7 @@ function VideoItem({ video }: { video: any }) {
               controls={false}
             />
           ) : (
-            <img src={mediaUrl} alt="Thumbnail" className="w-full h-full object-cover lg:object-contain max-h-[60vh] lg:max-h-full" />
+            <img src={mediaUrl} alt="Thumbnail" className="w-full h-full object-cover lg:object-contain" />
           )}
 
           {/* Central Play Button Overlay (when paused) */}
@@ -286,11 +286,11 @@ function VideoItem({ video }: { video: any }) {
         </div>
 
         {/* Details Section (Scrollable if needed) */}
-        <div className="flex-1 p-5 md:p-8 overflow-y-auto bg-white dark:bg-slate-900/95 backdrop-blur-xl border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.3)] z-40 relative lg:w-[450px] lg:shrink-0 lg:h-full flex flex-col">
+        <div className="absolute bottom-16 lg:bottom-auto left-0 right-0 lg:relative lg:left-auto lg:right-auto flex-1 p-5 md:p-8 overflow-y-auto bg-gradient-to-t from-black via-black/60 to-transparent lg:bg-white lg:dark:bg-slate-900/95 lg:backdrop-blur-xl border-t lg:border-t-0 lg:border-l border-transparent lg:border-slate-100 lg:dark:border-slate-800 shadow-none lg:shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)] lg:dark:shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.3)] z-40 lg:w-[450px] lg:shrink-0 lg:h-full flex flex-col max-h-[40vh] lg:max-h-full pointer-events-none lg:pointer-events-auto">
 
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col pointer-events-auto">
             <div className="flex justify-between items-start gap-4 mb-4">
-              <h1 className="text-xl md:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 font-heading tracking-tight leading-tight">
+              <h1 className="text-xl md:text-2xl font-extrabold text-white lg:text-transparent lg:bg-clip-text lg:bg-gradient-to-r lg:from-slate-900 lg:to-slate-600 lg:dark:from-white lg:dark:to-slate-400 font-heading tracking-tight leading-tight drop-shadow-md lg:drop-shadow-none">
                 {video.videoTitle || video.categoryName || "Untitled Video"}
               </h1>
 
@@ -325,28 +325,28 @@ function VideoItem({ video }: { video: any }) {
 
             <div className="flex flex-wrap items-center gap-2 mb-6">
               {video.shopName && (
-                <div className="flex items-center gap-1.5 text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full shadow-sm text-sm font-semibold">
+                <div className="flex items-center gap-1.5 text-white lg:text-primary bg-white/20 lg:bg-primary/10 border border-white/20 lg:border-primary/20 px-3 py-1 rounded-full shadow-sm text-sm font-semibold backdrop-blur-sm lg:backdrop-blur-none">
                   <MapPin className="w-4 h-4" />
                   {video.shopName}
                 </div>
               )}
               {video.views !== undefined && (
-                <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-3 py-1 rounded-full shadow-sm text-sm font-semibold text-slate-700 dark:text-slate-300">
-                  <Eye className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                <div className="flex items-center gap-1.5 bg-white/20 lg:bg-slate-100 lg:dark:bg-slate-800/80 border border-white/20 lg:border-slate-200 lg:dark:border-slate-700 px-3 py-1 rounded-full shadow-sm text-sm font-semibold text-white lg:text-slate-700 lg:dark:text-slate-300 backdrop-blur-sm lg:backdrop-blur-none">
+                  <Eye className="w-4 h-4 text-white lg:text-slate-500 lg:dark:text-slate-400" />
                   {video.views} Views
                 </div>
               )}
               {video.createdAt && (
-                <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-3 py-1 rounded-full shadow-sm text-sm font-semibold text-slate-700 dark:text-slate-300">
-                  <Calendar className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                <div className="flex items-center gap-1.5 bg-white/20 lg:bg-slate-100 lg:dark:bg-slate-800/80 border border-white/20 lg:border-slate-200 lg:dark:border-slate-700 px-3 py-1 rounded-full shadow-sm text-sm font-semibold text-white lg:text-slate-700 lg:dark:text-slate-300 backdrop-blur-sm lg:backdrop-blur-none">
+                  <Calendar className="w-4 h-4 text-white lg:text-slate-500 lg:dark:text-slate-400" />
                   {new Date(video.createdAt).toLocaleDateString()}
                 </div>
               )}
             </div>
 
-            <div className="bg-slate-50 dark:bg-slate-800/40 rounded-2xl p-5 mb-6 border border-slate-100 dark:border-slate-700/50">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Description</h3>
-              <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap text-sm md:text-base font-medium">
+            <div className="bg-transparent lg:bg-slate-50 lg:dark:bg-slate-800/40 rounded-2xl p-0 lg:p-5 mb-6 border-0 lg:border lg:border-slate-100 lg:dark:border-slate-700/50 text-white lg:text-inherit">
+              <h3 className="hidden lg:block text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Description</h3>
+              <p className="text-white/90 lg:text-slate-700 lg:dark:text-slate-300 leading-relaxed whitespace-pre-wrap text-sm md:text-base font-medium line-clamp-2 lg:line-clamp-none drop-shadow-md lg:drop-shadow-none">
                 {video.description || "No description provided."}
               </p>
             </div>
