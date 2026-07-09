@@ -83,7 +83,7 @@ function MapPageContent() {
     const fetchShops = async () => {
       setIsFetching(true);
       try {
-        const query = (selectedCategory.toLowerCase() === "all" || selectedCategory.toLowerCase() === "others") ? "" : selectedCategory.toLowerCase();
+        const query = (selectedCategory.toLowerCase() === "all" || selectedCategory.toLowerCase() === "others") ? "all" : selectedCategory.toLowerCase();
         const res = await searchShops(query);
         if (res && res.data) {
           setShops(res.data);
